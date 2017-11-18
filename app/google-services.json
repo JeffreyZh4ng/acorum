@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "719638378866",
+    "firebase_url": "https://final-project-jeffreyzh4-75782.firebaseio.com",
+    "project_id": "final-project-jeffreyzh4-75782",
+    "storage_bucket": "final-project-jeffreyzh4-75782.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719638378866:android:d3c190f37d1163ae",
+        "android_client_info": {
+          "package_name": "edu.illinois.finalproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "719638378866-sc1bm0516icdohgu47u559580hqp3tol.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.illinois.finalproject",
+            "certificate_hash": "0ef6ccb1d89582614337907847b7ba9a81ad3ea7"
+          }
+        },
+        {
+          "client_id": "719638378866-84u1cljaugol8615l7ig9jcpdrgsqvb7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLm08XMB9c0peTe1ZHwY8RQwrDAqA1BiU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "719638378866-84u1cljaugol8615l7ig9jcpdrgsqvb7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
