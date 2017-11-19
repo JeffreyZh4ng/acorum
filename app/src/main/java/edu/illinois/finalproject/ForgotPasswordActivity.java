@@ -18,6 +18,12 @@ import com.google.firebase.auth.ProviderQueryResult;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
+    private static final String EMPTY_FIELD_ERROR = "Please enter a valid email";
+    private static final String MALFORMED_EMAIL_ERROR = "Invalid email entered";
+    private static final String EMAIL_DOESNT_EXIST_ERROR = "Email has not yet been registered";
+    private static final String EMAIL_SUCCESSFUL = "Email sent!";
+    private static final String UNABLE_TO_SEND_EMAIL_ERROR = "Failed to send email";
+
     private FirebaseAuth mAuth;
     private EditText emailField;
     private Button sendButton;
@@ -39,7 +45,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 backButtonListener();
             }
         });
-
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,7 +68,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private void resetPasswordListener() {
         String email = emailField.getText().toString();
         if (email.isEmpty()) {
-            Toast.makeText(ForgotPasswordActivity.this, "Please enter a valid email", Toast.LENGTH_LONG).show();
+            Toast.makeText(ForgotPasswordActivity.this, EMPTY_FIELD_ERROR, Toast.LENGTH_LONG).show();
         } else {
             resetPassword(email);
         }
@@ -81,12 +86,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<ProviderQueryResult> task) {
                 try {
                     if (task.isComplete() && task.getResult().getProviders().isEmpty()) {
-                        Toast.makeText(ForgotPasswordActivity.this, "Email has not yet been registered", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ForgotPasswordActivity.this, EMAIL_DOESNT_EXIST_ERROR, Toast.LENGTH_LONG).show();
                     } else {
                         sendEmail(email);
                     }
                 } catch (RuntimeException e) {
-                    Toast.makeText(ForgotPasswordActivity.this, "Invalid email entered", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ForgotPasswordActivity.this, MALFORMED_EMAIL_ERROR, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -102,12 +107,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         mAuth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(ForgotPasswordActivity.this, "Email sent!", Toast.LENGTH_LONG).show();
+                Toast.makeText(ForgotPasswordActivity.this, EMAIL_SUCCESSFUL, Toast.LENGTH_LONG).show();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(ForgotPasswordActivity.this, "Failed to send email", Toast.LENGTH_LONG).show();
+                Toast.makeText(ForgotPasswordActivity.this, UNABLE_TO_SEND_EMAIL_ERROR, Toast.LENGTH_LONG).show();
             }
         });
     }

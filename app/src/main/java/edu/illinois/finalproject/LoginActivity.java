@@ -50,14 +50,12 @@ public class LoginActivity extends AppCompatActivity {
                 loginListener();
             }
         });
-
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createAccountListener();
             }
         });
-
         forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

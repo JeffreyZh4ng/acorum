@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 public class CreateAccountActivity extends AppCompatActivity {
 
     private static final String NULL_CREDENTIALS_TOAST = "Please enter an Email/Password";
+    private static final String ACCOUNT_CREATION_SUCCESS = "Account successfully created!";
 
     private FirebaseAuth mAuth;
     private EditText emailField;
@@ -47,14 +48,12 @@ public class CreateAccountActivity extends AppCompatActivity {
                 registerListener();
             }
         });
-
         returnToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 returnToLoginListener();
             }
         });
-
         forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,7 +104,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(CreateAccountActivity.this, "Account successfully created!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CreateAccountActivity.this, ACCOUNT_CREATION_SUCCESS, Toast.LENGTH_LONG).show();
                     returnToLoginListener();
                 } else {
                     Toast.makeText(CreateAccountActivity.this, "Error: " + task.getException(), Toast.LENGTH_LONG).show();

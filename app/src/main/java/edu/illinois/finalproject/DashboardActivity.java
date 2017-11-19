@@ -20,6 +20,9 @@ import com.google.firebase.auth.FirebaseUser;
  */
 public class DashboardActivity extends AppCompatActivity {
 
+    private static final String PASSWORD_CHANGED_SUCCESSFUL = "Password Changed!";
+    private static final String INVALID_PASSWORD_ERROR = "Please enter a valid password";
+
     private FirebaseAuth mAuth;
     private TextView emailTextView;
     private EditText changePasswordField;
@@ -45,7 +48,6 @@ public class DashboardActivity extends AppCompatActivity {
                 logoutListener();
             }
         });
-
         changePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,7 +72,7 @@ public class DashboardActivity extends AppCompatActivity {
     private void changePasswordListener() {
         String newPassword = changePasswordField.getText().toString();
         if (newPassword.length() < 6) {
-            Toast.makeText(DashboardActivity.this, "Please enter a valid password", Toast.LENGTH_LONG).show();
+            Toast.makeText(DashboardActivity.this, INVALID_PASSWORD_ERROR, Toast.LENGTH_LONG).show();
         } else {
             changePassword(newPassword);
         }
@@ -87,7 +89,7 @@ public class DashboardActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(DashboardActivity.this, "Password Changed!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(DashboardActivity.this, PASSWORD_CHANGED_SUCCESSFUL, Toast.LENGTH_LONG).show();
                 }
             }
         });
