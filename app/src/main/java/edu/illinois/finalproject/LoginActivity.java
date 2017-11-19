@@ -67,9 +67,26 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Implementation for the login button action listener
+     * Implementation for the create account button action listener that will open the create account activity
      */
-    public void loginListener() {
+    private void createAccountListener() {
+        startActivity(new Intent(LoginActivity.this, CreateAccountActivity.class));
+        finish();
+    }
+
+    /**
+     * Implementation for the forgot password button action listener that will open up the forgot
+     * password activity
+     */
+    private void forgotPasswordListener() {
+        startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
+        finish();
+    }
+
+    /**
+     * Implementation for the login button action listener that will try to open the dashboard activity
+     */
+    private void loginListener() {
         String email = emailField.getText().toString();
         String password = passwordField.getText().toString();
         if (email.isEmpty() || password.isEmpty()) {
@@ -80,22 +97,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Implementation for the create account button action listener
-     */
-    public void createAccountListener() {
-        startActivity(new Intent(LoginActivity.this, CreateAccountActivity.class));
-        finish();
-    }
-
-    /**
-     * Implementation for the forgot password button action listener
-     */
-    public void forgotPasswordListener() {
-        startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
-        finish();
-    }
-    /**
-     * Makes a request to the FireBase Database to log the user in
+     * Helper method that makes a request to the FireBase Database to log the user in
      *
      * @param email The email the user inputted
      * @param password The password the user inputted

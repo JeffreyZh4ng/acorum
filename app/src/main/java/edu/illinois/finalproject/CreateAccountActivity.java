@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 
 /**
  * An activity that is opened when the user wants to create a new account
@@ -63,9 +64,27 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     /**
-     * Implementation for the register button action listener
+     * Implementation for the return to login button action listener that will open up the login activity
      */
-    public void registerListener() {
+    private void returnToLoginListener() {
+        startActivity(new Intent(CreateAccountActivity.this, LoginActivity.class));
+        finish();
+    }
+
+    /**
+     * Implementation for the forgot password button action listener that will open up the forgot
+     * password activity
+     */
+    private void forgotPasswordListener() {
+        startActivity(new Intent(CreateAccountActivity.this, ForgotPasswordActivity.class));
+        finish();
+    }
+
+    /**
+     * Implementation for the register button action listener. Attempts to register the user if
+     * all conditions are satisfied.
+     */
+    private void registerListener() {
         String email = emailField.getText().toString();
         String password = passwordField.getText().toString();
         if (email.isEmpty() || password.isEmpty()) {
@@ -76,23 +95,7 @@ public class CreateAccountActivity extends AppCompatActivity {
     }
 
     /**
-     * Implementation for the return to login button action listener
-     */
-    public void returnToLoginListener() {
-        startActivity(new Intent(CreateAccountActivity.this, LoginActivity.class));
-        finish();
-    }
-
-    /**
-     * Implementation for the forgot password button action listener
-     */
-    public void forgotPasswordListener() {
-        startActivity(new Intent(CreateAccountActivity.this, ForgotPasswordActivity.class));
-        finish();
-    }
-
-    /**
-     * Makes a request to the FireBase Database and creates a users account
+     * Helper method that makes a request to the FireBase Database and creates a users account
      *
      * @param email The email the user inputted
      * @param password The password the user inputted
@@ -103,6 +106,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(CreateAccountActivity.this, "Account successfully created!", Toast.LENGTH_LONG).show();
+                    returnToLoginListener();
                 } else {
                     Toast.makeText(CreateAccountActivity.this, "Error: " + task.getException(), Toast.LENGTH_LONG).show();
                 }
