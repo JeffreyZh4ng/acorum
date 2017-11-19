@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.ProviderQueryResult;
@@ -73,35 +75,40 @@ public class ForgotPasswordActivity extends AppCompatActivity {
      *
      * @param email The email you want to send the reset password to
      */
-    private void resetPassword(String email) {
-        final boolean[] emailExists = new boolean[1];
+    private void resetPassword(final String email) {
         mAuth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
             @Override
             public void onComplete(@NonNull Task<ProviderQueryResult> task) {
                 try {
-                    if (task.getResult().getProviders().isEmpty()) {
-                        emailExists[0] = false;
+                    if (task.isComplete() && task.getResult().getProviders().isEmpty()) {
                         Toast.makeText(ForgotPasswordActivity.this, "Email has not yet been registered", Toast.LENGTH_LONG).show();
                     } else {
-                        emailExists[0] = true;
+                        sendEmail(email);
                     }
                 } catch (RuntimeException e) {
                     Toast.makeText(ForgotPasswordActivity.this, "Invalid email entered", Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
 
-        if (emailExists[0]) {
-            mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(ForgotPasswordActivity.this, "Email sent!", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(ForgotPasswordActivity.this, "Failed to send email", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-        }
+    /**
+     * Helper method for the reset password method that will send the new password email to the specified
+     * email address if the email is registered in the authentication database
+     *
+     * @param email The email you want to send the password reset to
+     */
+    private void sendEmail(String email) {
+        mAuth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(ForgotPasswordActivity.this, "Email sent!", Toast.LENGTH_LONG).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(ForgotPasswordActivity.this, "Failed to send email", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private TextView emailTextView;
+    private EditText changePasswordField;
     private Button logoutButton;
     private Button changePasswordButton;
 
@@ -31,6 +33,7 @@ public class DashboardActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         emailTextView = (TextView) findViewById(R.id.emailTextView);
+        changePasswordField = (EditText) findViewById(R.id.newPasswordField);
         logoutButton = (Button) findViewById(R.id.logoutButton);
         changePasswordButton = (Button) findViewById(R.id.changePassowrdButton);
 
@@ -42,15 +45,34 @@ public class DashboardActivity extends AppCompatActivity {
                 logoutListener();
             }
         });
+
+        changePasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changePasswordListener();
+            }
+        });
     }
 
     /**
      * Implementation for on click listener that will log the user out when they click the logout button
      */
-    public void logoutListener() {
+    private void logoutListener() {
         mAuth.signOut();
         if (mAuth.getCurrentUser() == null) {
             startActivity(new Intent(DashboardActivity.this, LoginActivity.class));
+        }
+    }
+
+    /**
+     * Implementation for on the change password button listener that will try to set the users new password
+     */
+    private void changePasswordListener() {
+        String newPassword = changePasswordField.getText().toString();
+        if (newPassword.length() < 6) {
+            Toast.makeText(DashboardActivity.this, "Please enter a valid password", Toast.LENGTH_LONG).show();
+        } else {
+            changePassword(newPassword);
         }
     }
 
@@ -66,8 +88,6 @@ public class DashboardActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(DashboardActivity.this, "Password Changed!", Toast.LENGTH_LONG).show();
-                } else {
-
                 }
             }
         });
