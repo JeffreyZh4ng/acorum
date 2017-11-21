@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         createAccountButton = (Button) findViewById(R.id.createAccountButton);
         forgotPasswordButton = (Button) findViewById(R.id.forgotPasswordButton);
 
+        setTitle("Acorum - Login");
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

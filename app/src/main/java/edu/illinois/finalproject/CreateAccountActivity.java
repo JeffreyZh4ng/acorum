@@ -13,19 +13,29 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import edu.illinois.finalproject.javaobjects.UserInformation;
 
 /**
  * An activity that is opened when the user wants to create a new account
  */
 public class CreateAccountActivity extends AppCompatActivity {
 
-    private static final String NULL_CREDENTIALS_TOAST = "Please enter an Email/Password";
+    private static final String NULL_CREDENTIALS_TOAST = "Please complete all the empty fields";
+    private static final String PASSWORDS_DONT_MATCH = "The passwords you entered don't match";
     private static final String ACCOUNT_CREATION_SUCCESS = "Account successfully created!";
 
     private FirebaseAuth mAuth;
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference myRef;
+    private EditText firstNameField;
+    private EditText lastNameField;
     private EditText emailField;
     private EditText passwordField;
+    private EditText confirmPasswordField;
     private Button registerButton;
     private Button returnToLoginButton;
     private Button forgotPasswordButton;
@@ -35,9 +45,14 @@ public class CreateAccountActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
+        myRef = mDatabase.getReference();
 
+        firstNameField = (EditText) findViewById(R.id.firstNameField);
+        lastNameField = (EditText) findViewById(R.id.lastNameField);
         emailField = (EditText) findViewById(R.id.emailFeild);
         passwordField = (EditText) findViewById(R.id.passwordField);
+        confirmPasswordField = (EditText) findViewById(R.id.confirmPasswordField);
         registerButton = (Button) findViewById(R.id.registerButton);
         returnToLoginButton = (Button) findViewById(R.id.returnToLoginButton);
         forgotPasswordButton = (Button) findViewById(R.id.forgotPasswordButton);
@@ -84,12 +99,18 @@ public class CreateAccountActivity extends AppCompatActivity {
      * all conditions are satisfied.
      */
     private void registerListener() {
+        String firstName = firstNameField.getText().toString();
+        String lastName = lastNameField.getText().toString();
         String email = emailField.getText().toString();
         String password = passwordField.getText().toString();
-        if (email.isEmpty() || password.isEmpty()) {
+        String confirmPassowrd = confirmPasswordField.getText().toString();
+        if (!password.equals(confirmPassowrd)) {
+            Toast.makeText(CreateAccountActivity.this, PASSWORDS_DONT_MATCH, Toast.LENGTH_LONG).show();
+        }
+        else if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             Toast.makeText(CreateAccountActivity.this, NULL_CREDENTIALS_TOAST, Toast.LENGTH_LONG).show();
         } else {
-            signUpUser(email, password);
+            signUpUser(firstName, lastName, email, password);
         }
     }
 
@@ -99,12 +120,14 @@ public class CreateAccountActivity extends AppCompatActivity {
      * @param email The email the user inputted
      * @param password The password the user inputted
      */
-    private void signUpUser(String email, String password) {
+    private void signUpUser(final String firstName, final String lastName, final String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(CreateAccountActivity.this, ACCOUNT_CREATION_SUCCESS, Toast.LENGTH_LONG).show();
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    myRef.child("users").child(user.getUid()).setValue(new UserInformation(firstName, lastName, email));
                     returnToLoginListener();
                 } else {
                     Toast.makeText(CreateAccountActivity.this, "Error: " + task.getException(), Toast.LENGTH_LONG).show();
