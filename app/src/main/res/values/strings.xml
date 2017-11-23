@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">FinalProject</string>
+    <string name="profile_settings">Profile Settings</string>
+    <string name="my_profile">My Profile</string>
+    <string name="enter_your_email">Enter Your Email</string>
+    <string name="enter_your_password">Enter Your Password</string>
+    <string name="login">Login</string>
+    <string name="create_account">Create Account</string>
+    <string name="or">OR</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="return_to_login">Return to Login</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="send_password_verification">Send Password Verification</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
 </resources>
