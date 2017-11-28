@@ -12,6 +12,9 @@ public class UserInformation {
     private String email;
     private HashMap<String, Boolean> enrolledCourses = new HashMap<>();
 
+    public UserInformation() {
+    }
+
     public UserInformation(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;

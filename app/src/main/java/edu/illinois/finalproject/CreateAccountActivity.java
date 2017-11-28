@@ -30,7 +30,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
-    private DatabaseReference myRef;
+    private DatabaseReference mRef;
     private EditText firstNameField;
     private EditText lastNameField;
     private EditText emailField;
@@ -46,7 +46,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_account);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
-        myRef = mDatabase.getReference();
+        mRef = mDatabase.getReference();
 
         firstNameField = (EditText) findViewById(R.id.firstNameField);
         lastNameField = (EditText) findViewById(R.id.lastNameField);
@@ -127,7 +127,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Toast.makeText(CreateAccountActivity.this, ACCOUNT_CREATION_SUCCESS, Toast.LENGTH_LONG).show();
                     FirebaseUser user = mAuth.getCurrentUser();
-                    myRef.child("users").child(user.getUid()).setValue(new UserInformation(firstName, lastName, email));
+                    mRef.child("users").child(user.getUid()).setValue(new UserInformation(firstName, lastName, email));
                     returnToLoginListener();
                 } else {
                     Toast.makeText(CreateAccountActivity.this, "Error: " + task.getException(), Toast.LENGTH_LONG).show();

@@ -16,6 +16,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import edu.illinois.finalproject.javaobjects.UserInformation;
 
 /**
  * An activity that is created when the user has successfully logged in
@@ -24,33 +31,38 @@ public class DashboardActivity extends AppCompatActivity {
 
     private static final String PASSWORD_CHANGED_SUCCESSFUL = "Password Changed!";
     private static final String INVALID_PASSWORD_ERROR = "Please enter a valid password";
+    private static final int MIN_PASSWORD_LENGTH = 6;
 
     private FirebaseAuth mAuth;
-    private TextView emailTextView;
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mRef;
     private EditText changePasswordField;
-    private Button logoutButton;
     private Button changePasswordButton;
-    private Menu dashboardMenu;
+    private Button enrollButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
+        mRef = mDatabase.getReference();
 
-        emailTextView = (TextView) findViewById(R.id.emailTextView);
         changePasswordField = (EditText) findViewById(R.id.newPasswordField);
-        logoutButton = (Button) findViewById(R.id.logoutButton);
         changePasswordButton = (Button) findViewById(R.id.changePassowrdButton);
+        enrollButton = (Button) findViewById(R.id.enrollButton);
 
-        emailTextView.setText(mAuth.getCurrentUser().getEmail());
-
-        logoutButton.setOnClickListener(new View.OnClickListener() {
+        setTitle("Acorum - Dashboard");
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View view) {
-                logoutListener();
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                setWelcomeMessage(dataSnapshot);
             }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
         });
+
         changePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,9 +87,23 @@ public class DashboardActivity extends AppCompatActivity {
             startActivity(new Intent(DashboardActivity.this, ProfileSettingsActivity.class));
             finish();
             return true;
+        } else if (item.getItemId() == R.id.logoutButton){
+            logoutListener();
+            return true;
         } else {
             return true;
         }
+    }
+
+    private void setWelcomeMessage(DataSnapshot dataSnapshot) {
+        StringBuilder message = new StringBuilder("Welcome, ");
+        String userKey = mAuth.getCurrentUser().getUid();
+        String userFirstName = dataSnapshot.child("users").child(userKey).getValue(UserInformation.class).getFirstName();
+        message.append(userFirstName);
+        message.append(" ");
+        String userLastName = dataSnapshot.child("users").child(userKey).getValue(UserInformation.class).getLastName();
+        message.append(userLastName);
+        setTitle(message);
     }
 
     /**
@@ -95,7 +121,7 @@ public class DashboardActivity extends AppCompatActivity {
      */
     private void changePasswordListener() {
         String newPassword = changePasswordField.getText().toString();
-        if (newPassword.length() < 6) {
+        if (newPassword.length() < MIN_PASSWORD_LENGTH) {
             Toast.makeText(DashboardActivity.this, INVALID_PASSWORD_ERROR, Toast.LENGTH_LONG).show();
         } else {
             changePassword(newPassword);
