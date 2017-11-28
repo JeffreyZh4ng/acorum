@@ -29,15 +29,9 @@ import edu.illinois.finalproject.javaobjects.UserInformation;
  */
 public class DashboardActivity extends AppCompatActivity {
 
-    private static final String PASSWORD_CHANGED_SUCCESSFUL = "Password Changed!";
-    private static final String INVALID_PASSWORD_ERROR = "Please enter a valid password";
-    private static final int MIN_PASSWORD_LENGTH = 6;
-
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
-    private EditText changePasswordField;
-    private Button changePasswordButton;
     private Button enrollButton;
 
     @Override
@@ -48,8 +42,6 @@ public class DashboardActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
 
-        changePasswordField = (EditText) findViewById(R.id.newPasswordField);
-        changePasswordButton = (Button) findViewById(R.id.changePassowrdButton);
         enrollButton = (Button) findViewById(R.id.enrollButton);
 
         setTitle("Acorum - Dashboard");
@@ -61,13 +53,6 @@ public class DashboardActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {}
-        });
-
-        changePasswordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changePasswordListener();
-            }
         });
     }
 
@@ -114,34 +99,5 @@ public class DashboardActivity extends AppCompatActivity {
         if (mAuth.getCurrentUser() == null) {
             startActivity(new Intent(DashboardActivity.this, LoginActivity.class));
         }
-    }
-
-    /**
-     * Implementation for on the change password button listener that will try to set the users new password
-     */
-    private void changePasswordListener() {
-        String newPassword = changePasswordField.getText().toString();
-        if (newPassword.length() < MIN_PASSWORD_LENGTH) {
-            Toast.makeText(DashboardActivity.this, INVALID_PASSWORD_ERROR, Toast.LENGTH_LONG).show();
-        } else {
-            changePassword(newPassword);
-        }
-    }
-
-    /**
-     * Method that will change the password of the user in the Dashboard activity
-     *
-     * @param newPassword The new password
-     */
-    private void changePassword(String newPassword) {
-        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        firebaseUser.updatePassword(newPassword).addOnCompleteListener(this, new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(DashboardActivity.this, PASSWORD_CHANGED_SUCCESSFUL, Toast.LENGTH_LONG).show();
-                }
-            }
-        });
     }
 }
