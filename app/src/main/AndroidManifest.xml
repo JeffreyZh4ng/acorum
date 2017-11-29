@@ -23,7 +23,8 @@
         <activity android:name=".DashboardActivity" />
         <activity android:name=".ProfileSettingsActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".EnrollActivity"></activity>
+        <activity android:name=".EnrollActivity" />
+        <activity android:name=".RegisterCourseActivity"></activity>
     </application>
 
 </manifest>

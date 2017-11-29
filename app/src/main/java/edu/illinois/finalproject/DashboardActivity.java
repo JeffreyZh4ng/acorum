@@ -1,21 +1,15 @@
 package edu.illinois.finalproject;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +28,7 @@ public class DashboardActivity extends AppCompatActivity {
     private DatabaseReference mRef;
     private TextView enrollAlert;
     private Button enrollButton;
+    private Button registerCourseButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +40,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         enrollAlert = (TextView) findViewById(R.id.enrollAlert);
         enrollButton = (Button) findViewById(R.id.enrollButton);
+        registerCourseButton = (Button) findViewById(R.id.registerCourseButton);
 
         setTitle("Acorum - Dashboard");
         mRef.addValueEventListener(new ValueEventListener() {
@@ -52,10 +48,24 @@ public class DashboardActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 setWelcomeMessage(dataSnapshot);
                 setEnrollAlert(dataSnapshot);
+                setClassList(dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {}
+        });
+
+        enrollButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enrollListener();
+            }
+        });
+        registerCourseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createClassListener();
+            }
         });
     }
 
@@ -77,20 +87,23 @@ public class DashboardActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.logoutButton:
-                logoutListener();
+                mAuth.signOut();
+                if (mAuth.getCurrentUser() == null) {
+                    startActivity(new Intent(DashboardActivity.this, LoginActivity.class));
+                }
                 return true;
         }
         return true;
     }
 
-    /**
-     * Implementation for on click listener that will log the user out when they click the logout button
-     */
-    private void logoutListener() {
-        mAuth.signOut();
-        if (mAuth.getCurrentUser() == null) {
-            startActivity(new Intent(DashboardActivity.this, LoginActivity.class));
-        }
+    private void enrollListener() {
+        startActivity(new Intent(DashboardActivity.this, EnrollActivity.class));
+        finish();
+    }
+
+    private void createClassListener() {
+        startActivity(new Intent(DashboardActivity.this, RegisterCourseActivity.class));
+        finish();
     }
 
     private void setWelcomeMessage(DataSnapshot dataSnapshot) {
@@ -113,5 +126,9 @@ public class DashboardActivity extends AppCompatActivity {
         } else {
             enrollAlert.setVisibility(View.GONE);
         }
+    }
+
+    private void setClassList(DataSnapshot dataSnapshot) {
+
     }
 }

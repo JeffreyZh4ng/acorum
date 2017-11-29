@@ -104,6 +104,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         String email = emailField.getText().toString();
         String password = passwordField.getText().toString();
         String confirmPassowrd = confirmPasswordField.getText().toString();
+
         if (!password.equals(confirmPassowrd)) {
             Toast.makeText(CreateAccountActivity.this, PASSWORDS_DONT_MATCH, Toast.LENGTH_LONG).show();
         }
