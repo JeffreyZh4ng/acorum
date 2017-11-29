@@ -22,7 +22,8 @@
         <activity android:name=".ForgotPasswordActivity" />
         <activity android:name=".DashboardActivity" />
         <activity android:name=".ProfileSettingsActivity" />
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".EnrollActivity"></activity>
     </application>
 
 </manifest>

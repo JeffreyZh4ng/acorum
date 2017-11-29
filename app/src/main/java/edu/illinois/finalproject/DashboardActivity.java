@@ -32,6 +32,7 @@ public class DashboardActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
+    private TextView enrollAlert;
     private Button enrollButton;
 
     @Override
@@ -42,13 +43,15 @@ public class DashboardActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
 
+        enrollAlert = (TextView) findViewById(R.id.enrollAlert);
         enrollButton = (Button) findViewById(R.id.enrollButton);
 
         setTitle("Acorum - Dashboard");
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 setWelcomeMessage(dataSnapshot);
+                setEnrollAlert(dataSnapshot);
             }
 
             @Override
@@ -64,19 +67,29 @@ public class DashboardActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.profileButton) {
-            startActivity(new Intent(DashboardActivity.this, ProfileActivity.class));
-            finish();
-            return true;
-        } else if (item.getItemId() == R.id.profileSettingsButton) {
-            startActivity(new Intent(DashboardActivity.this, ProfileSettingsActivity.class));
-            finish();
-            return true;
-        } else if (item.getItemId() == R.id.logoutButton){
-            logoutListener();
-            return true;
-        } else {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.profileButton:
+                startActivity(new Intent(DashboardActivity.this, ProfileActivity.class));
+                finish();
+                break;
+            case R.id.profileSettingsButton:
+                startActivity(new Intent(DashboardActivity.this, ProfileSettingsActivity.class));
+                finish();
+                break;
+            case R.id.logoutButton:
+                logoutListener();
+                return true;
+        }
+        return true;
+    }
+
+    /**
+     * Implementation for on click listener that will log the user out when they click the logout button
+     */
+    private void logoutListener() {
+        mAuth.signOut();
+        if (mAuth.getCurrentUser() == null) {
+            startActivity(new Intent(DashboardActivity.this, LoginActivity.class));
         }
     }
 
@@ -91,13 +104,14 @@ public class DashboardActivity extends AppCompatActivity {
         setTitle(message);
     }
 
-    /**
-     * Implementation for on click listener that will log the user out when they click the logout button
-     */
-    private void logoutListener() {
-        mAuth.signOut();
-        if (mAuth.getCurrentUser() == null) {
-            startActivity(new Intent(DashboardActivity.this, LoginActivity.class));
+    private void setEnrollAlert(DataSnapshot dataSnapshot) {
+        String userKey = mAuth.getCurrentUser().getUid();
+        int enrolledClassesCount = dataSnapshot.child("users").child(userKey)
+                .getValue(UserInformation.class).getEnrolledCourses().size();
+        if (enrolledClassesCount == 1) {
+            enrollAlert.setVisibility(View.VISIBLE);
+        } else {
+            enrollAlert.setVisibility(View.GONE);
         }
     }
 }

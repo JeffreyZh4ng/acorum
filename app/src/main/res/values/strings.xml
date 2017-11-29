@@ -2,8 +2,7 @@
     <string name="app_name">FinalProject</string>
     <string name="profile_settings">Profile Settings</string>
     <string name="my_profile">My Profile</string>
-    <string name="enter_your_email">Enter Your Email</string>
-    <string name="enter_your_password">Enter Your Password</string>
+    <string name="enter_password">Enter Password</string>
     <string name="login">Login</string>
     <string name="create_account">Create Account</string>
     <string name="or">OR</string>
