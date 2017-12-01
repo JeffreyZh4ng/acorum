@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,16 +17,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 import edu.illinois.finalproject.javaobjects.UserInformation;
 
 /**
  * An activity that is created when the user has successfully logged in
  */
-public class DashboardActivity extends AppCompatActivity {
+public class UserDashboardActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
+    private String userKey;
+    private LinearLayout courseListLayout;
     private TextView enrollAlert;
     private Button enrollButton;
     private Button registerCourseButton;
@@ -33,16 +38,17 @@ public class DashboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(R.layout.activity_user_dashboard);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
+        userKey = mAuth.getCurrentUser().getUid();
 
+        courseListLayout = (LinearLayout) findViewById(R.id.courseList);
         enrollAlert = (TextView) findViewById(R.id.enrollAlert);
         enrollButton = (Button) findViewById(R.id.enrollButton);
         registerCourseButton = (Button) findViewById(R.id.registerCourseButton);
 
-        setTitle("Acorum - Dashboard");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -79,17 +85,17 @@ public class DashboardActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.profileButton:
-                startActivity(new Intent(DashboardActivity.this, ProfileActivity.class));
+                startActivity(new Intent(UserDashboardActivity.this, ProfileActivity.class));
                 finish();
                 break;
             case R.id.profileSettingsButton:
-                startActivity(new Intent(DashboardActivity.this, ProfileSettingsActivity.class));
+                startActivity(new Intent(UserDashboardActivity.this, ProfileSettingsActivity.class));
                 finish();
                 break;
             case R.id.logoutButton:
                 mAuth.signOut();
                 if (mAuth.getCurrentUser() == null) {
-                    startActivity(new Intent(DashboardActivity.this, LoginActivity.class));
+                    startActivity(new Intent(UserDashboardActivity.this, LoginActivity.class));
                 }
                 return true;
         }
@@ -97,18 +103,17 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void enrollListener() {
-        startActivity(new Intent(DashboardActivity.this, EnrollActivity.class));
+        startActivity(new Intent(UserDashboardActivity.this, EnrollActivity.class));
         finish();
     }
 
     private void createClassListener() {
-        startActivity(new Intent(DashboardActivity.this, RegisterCourseActivity.class));
+        startActivity(new Intent(UserDashboardActivity.this, RegisterCourseActivity.class));
         finish();
     }
 
     private void setWelcomeMessage(DataSnapshot dataSnapshot) {
         StringBuilder message = new StringBuilder("Welcome, ");
-        String userKey = mAuth.getCurrentUser().getUid();
         String userFirstName = dataSnapshot.child("users").child(userKey).getValue(UserInformation.class).getFirstName();
         message.append(userFirstName);
         message.append(" ");
@@ -118,7 +123,6 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void setEnrollAlert(DataSnapshot dataSnapshot) {
-        String userKey = mAuth.getCurrentUser().getUid();
         int enrolledClassesCount = dataSnapshot.child("users").child(userKey)
                 .getValue(UserInformation.class).getEnrolledCourses().size();
         if (enrolledClassesCount == 1) {
@@ -129,6 +133,12 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void setClassList(DataSnapshot dataSnapshot) {
-
+        HashMap<String, Boolean> courseList = dataSnapshot.child("users").child(userKey).
+                getValue(UserInformation.class).getEnrolledCourses();
+        for (String key: courseList.keySet()) {
+            if (courseList.get(key)) {
+                //courseListLayout.add
+            }
+        }
     }
 }

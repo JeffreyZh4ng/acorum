@@ -20,11 +20,13 @@
         </activity>
         <activity android:name=".CreateAccountActivity" />
         <activity android:name=".ForgotPasswordActivity" />
-        <activity android:name=".DashboardActivity" />
+        <activity android:name=".UserDashboardActivity" />
         <activity android:name=".ProfileSettingsActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".EnrollActivity" />
-        <activity android:name=".RegisterCourseActivity"></activity>
+        <activity android:name=".RegisterCourseActivity" />
+        <activity android:name=".CourseDashboardActivity" />
+        <activity android:name=".listelements.CourseListElement"></activity>
     </application>
 
 </manifest>

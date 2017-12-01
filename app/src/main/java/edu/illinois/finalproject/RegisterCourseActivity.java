@@ -1,5 +1,6 @@
 package edu.illinois.finalproject;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,10 +9,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import edu.illinois.finalproject.javaobjects.Course;
+import edu.illinois.finalproject.javaobjects.UserInformation;
 
 public class RegisterCourseActivity extends AppCompatActivity {
 
@@ -25,6 +30,7 @@ public class RegisterCourseActivity extends AppCompatActivity {
     private DatabaseReference mRef;
     private EditText universityNameField;
     private EditText courseTitleField;
+    private EditText courseSectionField;
     private EditText courseYearField;
     private EditText courseTermField;
     private EditText studentEnrollmentKeyField;
@@ -41,6 +47,7 @@ public class RegisterCourseActivity extends AppCompatActivity {
 
         universityNameField = (EditText) findViewById(R.id.universityNameField);
         courseTitleField = (EditText) findViewById(R.id.courseTitleField);
+        courseSectionField = (EditText) findViewById(R.id.courseSectionField);
         courseYearField = (EditText) findViewById(R.id.courseYearField);
         courseTermField = (EditText) findViewById(R.id.courseTermField);
         studentEnrollmentKeyField = (EditText) findViewById(R.id.studentEnrollmentKeyField);
@@ -56,30 +63,43 @@ public class RegisterCourseActivity extends AppCompatActivity {
     }
 
     private void validateCourse() {
-        String universityName = universityNameField.getText().toString();
-        String courseTitle = courseTitleField.getText().toString();
-        String courseYear = courseYearField.getText().toString();
-        String courseTerm = courseTermField.getText().toString();
-        String studentEnrollmentKey = studentEnrollmentKeyField.getText().toString();
+        final String universityName = universityNameField.getText().toString();
+        final String courseTitle = courseTitleField.getText().toString();
+        final String courseSection = courseSectionField.getText().toString();
+        final String courseYear = courseYearField.getText().toString();
+        final String courseTerm = courseTermField.getText().toString();
+        final String studentEnrollmentKey = studentEnrollmentKeyField.getText().toString();
         String registerCourseKey = registerCourseKeyField.getText().toString();
 
         if (!registerCourseKey.equals(CREATE_COURSE_PERMISSION_KEY)) {
             Toast.makeText(RegisterCourseActivity.this, KEYS_DONT_MATCH, Toast.LENGTH_LONG).show();
         }
-        else if (universityName.isEmpty() || courseTitle.isEmpty() || courseYear.isEmpty()
+        else if (universityName.isEmpty() || courseTitle.isEmpty() || courseYear.isEmpty() || courseSection.isEmpty()
                 || courseTerm.isEmpty() || studentEnrollmentKey.isEmpty() || registerCourseKey.isEmpty()) {
             Toast.makeText(RegisterCourseActivity.this, NULL_FIELDS_TOAST, Toast.LENGTH_LONG).show();
         } else {
-            registerCourse(universityName, courseTitle, courseYear, courseTerm, studentEnrollmentKey);
+            final String[] userName = new String[1];
+            mRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    UserInformation userInformation = dataSnapshot.child("users").child
+                            (mAuth.getCurrentUser().getUid()).getValue(UserInformation.class);
+                    userName[0] = userInformation.getFirstName() + " " + userInformation.getLastName();
+                    registerCourse(universityName, studentEnrollmentKey, courseTerm, courseSection, courseYear, userName[0], courseTitle);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {}
+            });
         }
     }
 
-    private void registerCourse(String universityName, String courseTitle, String courseYear, String courseTerm, String studentEnrollmentKey) {
+    private void registerCourse(String universityName, String studentEnrollmentKey, String courseTerm, String courseSection, String courseYear, String userName, String courseTitle) {
         String userKey = mAuth.getCurrentUser().getUid();
-        Course course = new Course(universityName, studentEnrollmentKey, courseTerm, courseYear);
+        Course course = new Course(universityName, studentEnrollmentKey, courseTerm, courseSection, courseYear, userName, userKey);
         mRef.child("courses").child(courseTitle).setValue(course);
-        mRef.child("courses").child(courseTitle).child("instructors").child(userKey).setValue(true);
         mRef.child("users").child(userKey).child("enrolledCourses").child(courseTitle).setValue(true);
         Toast.makeText(RegisterCourseActivity.this, COURSE_CREATION_SUCCESS, Toast.LENGTH_LONG).show();
+        startActivity(new Intent(RegisterCourseActivity.this, UserDashboardActivity.class));
     }
 }

@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+            startActivity(new Intent(LoginActivity.this, UserDashboardActivity.class));
         }
 
         emailField = (EditText) findViewById(R.id.emailFeild);
@@ -106,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                    startActivity(new Intent(LoginActivity.this, UserDashboardActivity.class));
                 } else {
                     Toast.makeText(LoginActivity.this, INVALID_CREDENTIALS_TOAST, Toast.LENGTH_LONG).show();
                 }

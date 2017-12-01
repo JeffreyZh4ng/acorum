@@ -11,25 +11,27 @@ public class Course {
     private String key;
     private String term;
     private String year;
+    private String section;
     private int enrollment = 1;
-    private HashMap<String, Boolean> instructors = new HashMap<>();
+    private HashMap<String, String> instructors = new HashMap<>();
 
     public Course() {
     }
 
-    public Course(String university, String key, String term, String year) {
+    public Course(String university, String key, String term, String section, String year, String userName, String userKey) {
         this.university = university;
         this.key = key;
+        this.section = section;
         this.term = term;
         this.year = year;
-        instructors.put("Placeholder Instructor", false);
+        instructors.put(userKey, userName);
     }
 
     public String getUniversity() {
         return university;
     }
 
-    public void setSchool(String university) {
+    public void setUniversity(String university) {
         this.university = university;
     }
 
@@ -57,6 +59,14 @@ public class Course {
         this.year = year;
     }
 
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
+
     public int getEnrollment() {
         return enrollment;
     }
@@ -65,7 +75,7 @@ public class Course {
         this.enrollment = enrollment;
     }
 
-    public HashMap<String, Boolean> getInstructors() {
+    public HashMap<String, String> getInstructors() {
         return instructors;
     }
 }
