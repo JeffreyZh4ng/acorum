@@ -7,6 +7,7 @@ import java.util.HashMap;
  */
 public class Course {
 
+    private String courseName;
     private String university;
     private String key;
     private String term;
@@ -18,13 +19,22 @@ public class Course {
     public Course() {
     }
 
-    public Course(String university, String key, String term, String section, String year, String userName, String userKey) {
+    public Course(String courseName, String university, String key, String term, String section, String year, String userName, String userKey) {
+        this.courseName = courseName;
         this.university = university;
         this.key = key;
         this.section = section;
         this.term = term;
         this.year = year;
         instructors.put(userKey, userName);
+    }
+
+    public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
     public String getUniversity() {

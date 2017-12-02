@@ -3,6 +3,7 @@ package edu.illinois.finalproject;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
+import edu.illinois.finalproject.javaobjects.Course;
 import edu.illinois.finalproject.javaobjects.UserInformation;
 
 /**
@@ -114,18 +116,21 @@ public class UserDashboardActivity extends AppCompatActivity {
 
     private void setWelcomeMessage(DataSnapshot dataSnapshot) {
         StringBuilder message = new StringBuilder("Welcome, ");
+
         String userFirstName = dataSnapshot.child("users").child(userKey).getValue(UserInformation.class).getFirstName();
         message.append(userFirstName);
         message.append(" ");
         String userLastName = dataSnapshot.child("users").child(userKey).getValue(UserInformation.class).getLastName();
         message.append(userLastName);
+
         setTitle(message);
     }
 
     private void setEnrollAlert(DataSnapshot dataSnapshot) {
         int enrolledClassesCount = dataSnapshot.child("users").child(userKey)
                 .getValue(UserInformation.class).getEnrolledCourses().size();
-        if (enrolledClassesCount == 1) {
+
+        if (enrolledClassesCount == 0) {
             enrollAlert.setVisibility(View.VISIBLE);
         } else {
             enrollAlert.setVisibility(View.GONE);
@@ -135,10 +140,35 @@ public class UserDashboardActivity extends AppCompatActivity {
     private void setClassList(DataSnapshot dataSnapshot) {
         HashMap<String, Boolean> courseList = dataSnapshot.child("users").child(userKey).
                 getValue(UserInformation.class).getEnrolledCourses();
-        for (String key: courseList.keySet()) {
-            if (courseList.get(key)) {
-                //courseListLayout.add
-            }
+        for (final String key: courseList.keySet()) {
+            mRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    /*View view = LayoutInflater.from(courseListLayout.getContext()).inflate
+                            (R.layout.activity_course_list_element, courseListLayout, false);
+                    Course course = dataSnapshot.child("courses").child(key).getValue(Course.class);
+
+                    TextView courseTitleField = (TextView) view.findViewById(R.id.courseName);
+                    courseTitleField.setText(course.getCourseName());
+
+                    TextView courseInstructorField = (TextView) view.findViewById(R.id.courseInstructor);
+                    StringBuilder instructorStr = new StringBuilder("Instructors: ");
+                    for (String instructorKey: course.getInstructors().keySet()) {
+                        instructorStr.append(course.getInstructors().get(instructorKey));
+                        instructorStr.append(", ");
+                    }
+                    instructorStr.delete(instructorStr.length() - 2, instructorStr.length());
+                    courseInstructorField.setText(instructorStr);
+
+
+                    courseListLayout.addView(view);*/
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 }

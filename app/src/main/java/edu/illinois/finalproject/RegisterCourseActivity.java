@@ -79,7 +79,7 @@ public class RegisterCourseActivity extends AppCompatActivity {
             Toast.makeText(RegisterCourseActivity.this, NULL_FIELDS_TOAST, Toast.LENGTH_LONG).show();
         } else {
             final String[] userName = new String[1];
-            mRef.addValueEventListener(new ValueEventListener() {
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     UserInformation userInformation = dataSnapshot.child("users").child
@@ -89,16 +89,19 @@ public class RegisterCourseActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {}
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
             });
         }
     }
 
     private void registerCourse(String universityName, String studentEnrollmentKey, String courseTerm, String courseSection, String courseYear, String userName, String courseTitle) {
         String userKey = mAuth.getCurrentUser().getUid();
-        Course course = new Course(universityName, studentEnrollmentKey, courseTerm, courseSection, courseYear, userName, userKey);
-        mRef.child("courses").child(courseTitle).setValue(course);
-        mRef.child("users").child(userKey).child("enrolledCourses").child(courseTitle).setValue(true);
+        Course course = new Course(courseTitle, universityName, studentEnrollmentKey, courseTerm, courseSection, courseYear, userName, userKey);
+        String key = mRef.child("courses").push().getKey();
+        mRef.child("courses").child(key).setValue(course);
+        mRef.child("users").child(userKey).child("enrolledCourses").child(key).setValue(true);
         Toast.makeText(RegisterCourseActivity.this, COURSE_CREATION_SUCCESS, Toast.LENGTH_LONG).show();
         startActivity(new Intent(RegisterCourseActivity.this, UserDashboardActivity.class));
     }
