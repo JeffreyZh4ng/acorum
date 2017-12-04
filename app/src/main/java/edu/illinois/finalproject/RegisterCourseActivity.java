@@ -3,6 +3,8 @@ package edu.illinois.finalproject;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,6 +60,37 @@ public class RegisterCourseActivity extends AppCompatActivity {
                 validateCourse();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_dashboard, menu);
+        getMenuInflater().inflate(R.menu.menu_back_button, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.profileButton:
+                startActivity(new Intent(RegisterCourseActivity.this, ProfileActivity.class));
+                finish();
+                break;
+            case R.id.profileSettingsButton:
+                startActivity(new Intent(RegisterCourseActivity.this, ProfileSettingsActivity.class));
+                finish();
+                break;
+            case R.id.logoutButton:
+                mAuth.signOut();
+                if (mAuth.getCurrentUser() == null) {
+                    startActivity(new Intent(RegisterCourseActivity.this, LoginActivity.class));
+                }
+                break;
+            case R.id.backButton:
+                startActivity(new Intent(RegisterCourseActivity.this, UserDashboardActivity.class));
+                break;
+        }
+        return true;
     }
 
     private void validateCourse() {

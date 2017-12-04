@@ -82,6 +82,7 @@ public class UserDashboardActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dashboard, menu);
+        getMenuInflater().inflate(R.menu.menu_back_button, menu);
         return true;
     }
 
@@ -101,7 +102,10 @@ public class UserDashboardActivity extends AppCompatActivity {
                 if (mAuth.getCurrentUser() == null) {
                     startActivity(new Intent(UserDashboardActivity.this, LoginActivity.class));
                 }
-                return true;
+                break;
+            case R.id.backButton:
+                startActivity(new Intent(UserDashboardActivity.this, LoginActivity.class));
+                break;
         }
         return true;
     }
@@ -132,6 +136,7 @@ public class UserDashboardActivity extends AppCompatActivity {
     private void setClassList(DataSnapshot dataSnapshot) {
         HashMap<String, Boolean> courseList = dataSnapshot.child("users").child(userKey).
                 getValue(UserInformation.class).getEnrolledCourses();
+
         for (final String key: courseList.keySet()) {
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -161,9 +166,7 @@ public class UserDashboardActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
+                public void onCancelled(DatabaseError databaseError) {}
             });
         }
     }
