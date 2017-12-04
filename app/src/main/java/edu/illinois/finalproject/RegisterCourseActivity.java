@@ -33,7 +33,6 @@ public class RegisterCourseActivity extends AppCompatActivity {
     private EditText courseSectionField;
     private EditText courseYearField;
     private EditText courseTermField;
-    private EditText studentEnrollmentKeyField;
     private EditText registerCourseKeyField;
     private Button registerCourseButton;
 
@@ -50,7 +49,6 @@ public class RegisterCourseActivity extends AppCompatActivity {
         courseSectionField = (EditText) findViewById(R.id.courseSectionField);
         courseYearField = (EditText) findViewById(R.id.courseYearField);
         courseTermField = (EditText) findViewById(R.id.courseTermField);
-        studentEnrollmentKeyField = (EditText) findViewById(R.id.studentEnrollmentKeyField);
         registerCourseKeyField = (EditText) findViewById(R.id.registerCourseKeyField);
         registerCourseButton = (Button) findViewById(R.id.registerCourseButton);
 
@@ -68,14 +66,13 @@ public class RegisterCourseActivity extends AppCompatActivity {
         final String courseSection = courseSectionField.getText().toString();
         final String courseYear = courseYearField.getText().toString();
         final String courseTerm = courseTermField.getText().toString();
-        final String studentEnrollmentKey = studentEnrollmentKeyField.getText().toString();
         String registerCourseKey = registerCourseKeyField.getText().toString();
 
         if (!registerCourseKey.equals(CREATE_COURSE_PERMISSION_KEY)) {
             Toast.makeText(RegisterCourseActivity.this, KEYS_DONT_MATCH, Toast.LENGTH_LONG).show();
         }
         else if (universityName.isEmpty() || courseTitle.isEmpty() || courseYear.isEmpty() || courseSection.isEmpty()
-                || courseTerm.isEmpty() || studentEnrollmentKey.isEmpty() || registerCourseKey.isEmpty()) {
+                || courseTerm.isEmpty() || registerCourseKey.isEmpty()) {
             Toast.makeText(RegisterCourseActivity.this, NULL_FIELDS_TOAST, Toast.LENGTH_LONG).show();
         } else {
             final String[] userName = new String[1];
@@ -85,7 +82,7 @@ public class RegisterCourseActivity extends AppCompatActivity {
                     UserInformation userInformation = dataSnapshot.child("users").child
                             (mAuth.getCurrentUser().getUid()).getValue(UserInformation.class);
                     userName[0] = userInformation.getFirstName() + " " + userInformation.getLastName();
-                    registerCourse(universityName, studentEnrollmentKey, courseTerm, courseSection, courseYear, userName[0], courseTitle);
+                    registerCourse(universityName, courseTerm, courseSection, courseYear, userName[0], courseTitle);
                 }
 
                 @Override
@@ -96,9 +93,9 @@ public class RegisterCourseActivity extends AppCompatActivity {
         }
     }
 
-    private void registerCourse(String universityName, String studentEnrollmentKey, String courseTerm, String courseSection, String courseYear, String userName, String courseTitle) {
+    private void registerCourse(String universityName, String courseTerm, String courseSection, String courseYear, String userName, String courseTitle) {
         String userKey = mAuth.getCurrentUser().getUid();
-        Course course = new Course(courseTitle, universityName, studentEnrollmentKey, courseTerm, courseSection, courseYear, userName, userKey);
+        Course course = new Course(courseTitle, universityName, courseTerm, courseSection, courseYear, userName, userKey);
         String key = mRef.child("courses").push().getKey();
         mRef.child("courses").child(key).setValue(course);
         mRef.child("users").child(userKey).child("enrolledCourses").child(key).setValue(true);

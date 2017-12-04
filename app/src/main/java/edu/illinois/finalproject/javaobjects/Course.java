@@ -9,7 +9,6 @@ public class Course {
 
     private String courseName;
     private String university;
-    private String key;
     private String term;
     private String year;
     private String section;
@@ -20,10 +19,9 @@ public class Course {
     public Course() {
     }
 
-    public Course(String courseName, String university, String key, String term, String section, String year, String userName, String userKey) {
+    public Course(String courseName, String university, String term, String section, String year, String userName, String userKey) {
         this.courseName = courseName;
         this.university = university;
-        this.key = key;
         this.section = section;
         this.term = term;
         this.year = year;
@@ -45,14 +43,6 @@ public class Course {
 
     public void setUniversity(String university) {
         this.university = university;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 
     public String getTerm() {

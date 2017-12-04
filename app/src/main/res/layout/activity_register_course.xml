@@ -51,21 +51,6 @@
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <EditText
-        android:id="@+id/studentEnrollmentKeyField"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:ems="10"
-        android:hint="Student Enrollment Key"
-        android:inputType="textPersonName"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/courseTermField" />
-
-    <EditText
         android:id="@+id/courseYearField"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -100,14 +85,14 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Register Course Key"
         android:inputType="textPersonName"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/studentEnrollmentKeyField" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/courseTermField" />
 
     <Button
         android:id="@+id/registerCourseButton"
