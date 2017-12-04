@@ -28,6 +28,7 @@ public class EnrollActivity extends AppCompatActivity {
     private DatabaseReference mRef;
     private EditText courseEnrollKeyField;
     private Button joinCourseButton;
+    private String courseKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,7 @@ public class EnrollActivity extends AppCompatActivity {
     }
 
     private void joinCourseListener() {
-        String courseKey = courseEnrollKeyField.getText().toString();
+        courseKey = courseEnrollKeyField.getText().toString();
         if (courseKey.isEmpty()) {
             Toast.makeText(EnrollActivity.this, EMPTY_FIELD_ERROR, Toast.LENGTH_LONG).show();
         } else {
@@ -95,7 +96,9 @@ public class EnrollActivity extends AppCompatActivity {
                 boolean doesCourseExist = dataSnapshot.child("courses").child(courseEnrollKeyField.getText()
                         .toString()).exists();
                 if (doesCourseExist) {
-
+                    String userKey = mAuth.getCurrentUser().getUid();
+                    mRef.child("users").child(userKey).child("enrolledCourses").child(courseKey).setValue(true);
+                    startActivity(new Intent(EnrollActivity.this, UserDashboardActivity.class));
                 } else {
                     Toast.makeText(EnrollActivity.this, COURSE_DOESNT_EXIST, Toast.LENGTH_LONG).show();
                 }

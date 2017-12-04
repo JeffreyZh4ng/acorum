@@ -82,7 +82,6 @@ public class UserDashboardActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dashboard, menu);
-        getMenuInflater().inflate(R.menu.menu_back_button, menu);
         return true;
     }
 
@@ -102,9 +101,6 @@ public class UserDashboardActivity extends AppCompatActivity {
                 if (mAuth.getCurrentUser() == null) {
                     startActivity(new Intent(UserDashboardActivity.this, LoginActivity.class));
                 }
-                break;
-            case R.id.backButton:
-                startActivity(new Intent(UserDashboardActivity.this, LoginActivity.class));
                 break;
         }
         return true;
