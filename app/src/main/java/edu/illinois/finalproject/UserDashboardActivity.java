@@ -144,7 +144,7 @@ public class UserDashboardActivity extends AppCompatActivity {
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    /*View view = LayoutInflater.from(courseListLayout.getContext()).inflate
+                    View view = LayoutInflater.from(courseListLayout.getContext()).inflate
                             (R.layout.activity_course_list_element, courseListLayout, false);
                     Course course = dataSnapshot.child("courses").child(key).getValue(Course.class);
 
@@ -152,16 +152,20 @@ public class UserDashboardActivity extends AppCompatActivity {
                     courseTitleField.setText(course.getCourseName());
 
                     TextView courseInstructorField = (TextView) view.findViewById(R.id.courseInstructor);
-                    StringBuilder instructorStr = new StringBuilder("Instructors: ");
-                    for (String instructorKey: course.getInstructors().keySet()) {
-                        instructorStr.append(course.getInstructors().get(instructorKey));
-                        instructorStr.append(", ");
-                    }
-                    instructorStr.delete(instructorStr.length() - 2, instructorStr.length());
-                    courseInstructorField.setText(instructorStr);
+                    courseInstructorField.setText("Instructor:" + course.getHeadInstructor());
 
+                    TextView courseUniversityField = (TextView) view.findViewById(R.id.courseUniversity);
+                    courseUniversityField.setText(course.getUniversity());
 
-                    courseListLayout.addView(view);*/
+                    TextView courseInfoField = (TextView) view.findViewById(R.id.courseInfo);
+                    StringBuilder courseInfo = new StringBuilder(course.getTerm());
+                    courseInfo.append(" ");
+                    courseInfo.append(course.getYear());
+                    courseInfo.append(", Section: ");
+                    courseInfo.append(course.getSection());
+                    courseInfoField.setText(courseInfo);
+
+                    courseListLayout.addView(view);
                 }
 
                 @Override

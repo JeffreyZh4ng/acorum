@@ -13,6 +13,7 @@ public class Course {
     private String term;
     private String year;
     private String section;
+    private String headInstructor;
     private int enrollment = 1;
     private HashMap<String, String> instructors = new HashMap<>();
 
@@ -26,6 +27,7 @@ public class Course {
         this.section = section;
         this.term = term;
         this.year = year;
+        this.headInstructor = userName;
         instructors.put(userKey, userName);
     }
 
@@ -71,6 +73,14 @@ public class Course {
 
     public String getSection() {
         return section;
+    }
+
+    public String getHeadInstructor() {
+        return headInstructor;
+    }
+
+    public void setHeadInstructor(String headInstructor) {
+        this.headInstructor = headInstructor;
     }
 
     public void setSection(String section) {
