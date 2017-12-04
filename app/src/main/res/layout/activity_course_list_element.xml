@@ -10,7 +10,7 @@
     tools:context="edu.illinois.finalproject.listelements.CourseListElement">
 
     <TextView
-        android:id="@+id/courseName"
+        android:id="@+id/courseNameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -22,7 +22,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/courseInstructor"
+        android:id="@+id/courseInstructorView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -32,11 +32,11 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/courseName"
+        app:layout_constraintTop_toBottomOf="@+id/courseNameView"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/courseInfo"
+        android:id="@+id/courseInfoView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="16dp"
@@ -46,7 +46,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/courseUniversity"
+        android:id="@+id/courseUniversityView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -55,6 +55,6 @@
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/courseInfo"
+        app:layout_constraintTop_toBottomOf="@+id/courseInfoView"
         app:layout_constraintVertical_bias="1.0" />
 </android.support.constraint.ConstraintLayout>

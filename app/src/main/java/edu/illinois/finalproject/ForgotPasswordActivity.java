@@ -42,7 +42,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                backButtonListener();
+                startActivity(new Intent(ForgotPasswordActivity.this, LoginActivity.class));
+                finish();
             }
         });
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -51,14 +52,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 resetPasswordListener();
             }
         });
-    }
-
-    /**
-     * Implementation for the back button listener that will open the login activity
-     */
-    private void backButtonListener() {
-        startActivity(new Intent(ForgotPasswordActivity.this, LoginActivity.class));
-        finish();
     }
 
     /**

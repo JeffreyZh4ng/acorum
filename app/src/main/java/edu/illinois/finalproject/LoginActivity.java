@@ -54,32 +54,17 @@ public class LoginActivity extends AppCompatActivity {
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createAccountListener();
+                startActivity(new Intent(LoginActivity.this, CreateAccountActivity.class));
+                finish();
             }
         });
         forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                forgotPasswordListener();
+                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
+                finish();
             }
         });
-    }
-
-    /**
-     * Implementation for the create account button action listener that will open the create account activity
-     */
-    private void createAccountListener() {
-        startActivity(new Intent(LoginActivity.this, CreateAccountActivity.class));
-        finish();
-    }
-
-    /**
-     * Implementation for the forgot password button action listener that will open up the forgot
-     * password activity
-     */
-    private void forgotPasswordListener() {
-        startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
-        finish();
     }
 
     /**

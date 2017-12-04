@@ -66,32 +66,17 @@ public class CreateAccountActivity extends AppCompatActivity {
         returnToLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                returnToLoginListener();
+                startActivity(new Intent(CreateAccountActivity.this, LoginActivity.class));
+                finish();
             }
         });
         forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                forgotPasswordListener();
+                startActivity(new Intent(CreateAccountActivity.this, ForgotPasswordActivity.class));
+                finish();
             }
         });
-    }
-
-    /**
-     * Implementation for the return to login button action listener that will open up the login activity
-     */
-    private void returnToLoginListener() {
-        startActivity(new Intent(CreateAccountActivity.this, LoginActivity.class));
-        finish();
-    }
-
-    /**
-     * Implementation for the forgot password button action listener that will open up the forgot
-     * password activity
-     */
-    private void forgotPasswordListener() {
-        startActivity(new Intent(CreateAccountActivity.this, ForgotPasswordActivity.class));
-        finish();
     }
 
     /**
@@ -129,7 +114,8 @@ public class CreateAccountActivity extends AppCompatActivity {
                     Toast.makeText(CreateAccountActivity.this, ACCOUNT_CREATION_SUCCESS, Toast.LENGTH_LONG).show();
                     FirebaseUser user = mAuth.getCurrentUser();
                     mRef.child("users").child(user.getUid()).setValue(new UserInformation(firstName, lastName, email));
-                    returnToLoginListener();
+                    startActivity(new Intent(CreateAccountActivity.this, LoginActivity.class));
+                    finish();
                 } else {
                     Toast.makeText(CreateAccountActivity.this, "Error: " + task.getException(), Toast.LENGTH_LONG).show();
                 }

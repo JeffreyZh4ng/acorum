@@ -66,13 +66,15 @@ public class UserDashboardActivity extends AppCompatActivity {
         enrollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                enrollListener();
+                startActivity(new Intent(UserDashboardActivity.this, EnrollActivity.class));
+                finish();
             }
         });
         registerCourseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createClassListener();
+                startActivity(new Intent(UserDashboardActivity.this, RegisterCourseActivity.class));
+                finish();
             }
         });
     }
@@ -102,16 +104,6 @@ public class UserDashboardActivity extends AppCompatActivity {
                 return true;
         }
         return true;
-    }
-
-    private void enrollListener() {
-        startActivity(new Intent(UserDashboardActivity.this, EnrollActivity.class));
-        finish();
-    }
-
-    private void createClassListener() {
-        startActivity(new Intent(UserDashboardActivity.this, RegisterCourseActivity.class));
-        finish();
     }
 
     private void setWelcomeMessage(DataSnapshot dataSnapshot) {
@@ -148,16 +140,16 @@ public class UserDashboardActivity extends AppCompatActivity {
                             (R.layout.activity_course_list_element, courseListLayout, false);
                     Course course = dataSnapshot.child("courses").child(key).getValue(Course.class);
 
-                    TextView courseTitleField = (TextView) view.findViewById(R.id.courseName);
+                    TextView courseTitleField = (TextView) view.findViewById(R.id.courseNameView);
                     courseTitleField.setText(course.getCourseName());
 
-                    TextView courseInstructorField = (TextView) view.findViewById(R.id.courseInstructor);
+                    TextView courseInstructorField = (TextView) view.findViewById(R.id.courseInstructorView);
                     courseInstructorField.setText("Instructor:" + course.getHeadInstructor());
 
-                    TextView courseUniversityField = (TextView) view.findViewById(R.id.courseUniversity);
+                    TextView courseUniversityField = (TextView) view.findViewById(R.id.courseUniversityView);
                     courseUniversityField.setText(course.getUniversity());
 
-                    TextView courseInfoField = (TextView) view.findViewById(R.id.courseInfo);
+                    TextView courseInfoField = (TextView) view.findViewById(R.id.courseInfoView);
                     StringBuilder courseInfo = new StringBuilder(course.getTerm());
                     courseInfo.append(" ");
                     courseInfo.append(course.getYear());
