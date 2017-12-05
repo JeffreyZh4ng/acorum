@@ -24,7 +24,8 @@ import edu.illinois.finalproject.javaobjects.Course;
 import edu.illinois.finalproject.javaobjects.UserInformation;
 
 /**
- * An activity that is created when the user has successfully logged in
+ * An activity that is created when the user has successfully logged in. The user can enroll or create
+ * classes. They can also pick a class to go to its course dashboard.
  */
 public class UserDashboardActivity extends AppCompatActivity {
 
@@ -79,12 +80,24 @@ public class UserDashboardActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Override method that will create the settings icon and the back button in the menu bar
+     *
+     * @param menu The menu that the icons are being set to
+     * @return True
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dashboard, menu);
         return true;
     }
 
+    /**
+     * Override method that controls what happens when you click on one of the icons in the menu bar
+     *
+     * @param item The item in the menu that was clicked on
+     * @return True
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -106,6 +119,11 @@ public class UserDashboardActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Helper method that sets the title of the activity
+     *
+     * @param dataSnapshot The dataSnapshot needed to retrieve the users name
+     */
     private void setWelcomeMessage(DataSnapshot dataSnapshot) {
         StringBuilder message = new StringBuilder("Welcome, ");
 
@@ -118,6 +136,12 @@ public class UserDashboardActivity extends AppCompatActivity {
         setTitle(message);
     }
 
+    /**
+     * Helper method that will hide or show the alert message depending on if the user is enrolled
+     * in any classes
+     *
+     * @param dataSnapshot The dataSnapshot needed to retrieve the list of courses the user is in
+     */
     private void setEnrollAlert(DataSnapshot dataSnapshot) {
         int enrolledClassesCount = dataSnapshot.child("users").child(userKey)
                 .getValue(UserInformation.class).getEnrolledCourses().size();
@@ -129,6 +153,11 @@ public class UserDashboardActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Helper metho that will populate the list of courses that the user is a part of
+     *
+     * @param dataSnapshot The dataSnapshot needed to retrieve the list of courses the user is in
+     */
     private void setClassList(DataSnapshot dataSnapshot) {
         HashMap<String, Boolean> courseList = dataSnapshot.child("users").child(userKey).
                 getValue(UserInformation.class).getEnrolledCourses();
@@ -141,22 +170,8 @@ public class UserDashboardActivity extends AppCompatActivity {
                             (R.layout.activity_course_list_element, courseListLayout, false);
                     Course course = dataSnapshot.child("courses").child(key).getValue(Course.class);
 
-                    TextView courseTitleField = (TextView) view.findViewById(R.id.courseNameView);
-                    courseTitleField.setText(course.getCourseName());
-
-                    TextView courseInstructorField = (TextView) view.findViewById(R.id.courseInstructorView);
-                    courseInstructorField.setText("Instructor:" + course.getHeadInstructor());
-
-                    TextView courseUniversityField = (TextView) view.findViewById(R.id.courseUniversityView);
-                    courseUniversityField.setText(course.getUniversity());
-
-                    TextView courseInfoField = (TextView) view.findViewById(R.id.courseInfoView);
-                    StringBuilder courseInfo = new StringBuilder(course.getTerm());
-                    courseInfo.append(" ");
-                    courseInfo.append(course.getYear());
-                    courseInfo.append(", Section: ");
-                    courseInfo.append(course.getSection());
-                    courseInfoField.setText(courseInfo);
+                    setElementText(key, course, view);
+                    setElementOnClick(key, view);
 
                     courseListLayout.addView(view);
                 }
@@ -165,5 +180,48 @@ public class UserDashboardActivity extends AppCompatActivity {
                 public void onCancelled(DatabaseError databaseError) {}
             });
         }
+    }
+
+    /**
+     * Helper method that will be used to set each of the course element's text
+     *
+     * @param key The courseKey of the course
+     * @param course The course object from the database
+     * @param view The view of the inflater
+     */
+    private void setElementText(String key, Course course, View view) {
+        TextView courseTitleField = (TextView) view.findViewById(R.id.courseNameView);
+        courseTitleField.setText(course.getCourseName());
+
+        TextView courseInstructorField = (TextView) view.findViewById(R.id.courseInstructorView);
+        courseInstructorField.setText("Instructor:" + course.getHeadInstructor());
+
+        TextView courseUniversityField = (TextView) view.findViewById(R.id.courseUniversityView);
+        courseUniversityField.setText(course.getUniversity());
+
+        TextView courseInfoField = (TextView) view.findViewById(R.id.courseInfoView);
+        StringBuilder courseInfo = new StringBuilder(course.getTerm());
+        courseInfo.append(" ");
+        courseInfo.append(course.getYear());
+        courseInfo.append(", Section: ");
+        courseInfo.append(course.getSection());
+        courseInfoField.setText(courseInfo);
+    }
+
+    /**
+     * Helper method that sets on click listeners to each of the elements in the list
+     *
+     * @param key The courseKey of the course
+     * @param view The view of the layout inflater
+     */
+    private void setElementOnClick(final String key, View view) {
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(UserDashboardActivity.this, CourseDashboardActivity.class)
+                        .putExtra(key, "courseKey"));
+            }
+        });
+
     }
 }

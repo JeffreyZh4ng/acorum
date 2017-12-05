@@ -18,6 +18,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import edu.illinois.finalproject.javaobjects.Course;
+
+/**
+ * The activity that will open when the user wants to register for a class. The user will enter the
+ * course key specified by the instructor
+ */
 public class EnrollActivity extends AppCompatActivity {
 
     private static final String EMPTY_FIELD_ERROR = "Please enter a valid course key";
@@ -49,6 +55,12 @@ public class EnrollActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Override method that will create the settings icon and the back button in the menu bar
+     *
+     * @param menu The menu that the icons are being set to
+     * @return True
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dashboard, menu);
@@ -56,6 +68,12 @@ public class EnrollActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Override method that controls what happens when you click on one of the icons in the menu bar
+     *
+     * @param item The item in the menu that was clicked on
+     * @return True
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -80,6 +98,10 @@ public class EnrollActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Helper method that will enroll the student in a course. Checks if the text field is empty. If
+     * not, it will call another helper
+     */
     private void joinCourseListener() {
         courseKey = courseEnrollKeyField.getText().toString();
         if (courseKey.isEmpty()) {
@@ -89,14 +111,19 @@ public class EnrollActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Helper that will enter the course info into the users profile in the database. Will check if
+     * key that was entered exists first and will increment the enrollment of the class
+     */
     private void enrollStudent() {
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean doesCourseExist = dataSnapshot.child("courses").child(courseEnrollKeyField.getText()
-                        .toString()).exists();
-                if (doesCourseExist) {
+                DataSnapshot courseData = dataSnapshot.child("courses").child(courseKey);
+                if (courseData.exists()) {
                     String userKey = mAuth.getCurrentUser().getUid();
+                    int enrollment = courseData.getValue(Course.class).getEnrollment() + 1;
+                    courseData.getValue(Course.class).setEnrollment(enrollment);
                     mRef.child("users").child(userKey).child("enrolledCourses").child(courseKey).setValue(true);
                     startActivity(new Intent(EnrollActivity.this, UserDashboardActivity.class));
                 } else {

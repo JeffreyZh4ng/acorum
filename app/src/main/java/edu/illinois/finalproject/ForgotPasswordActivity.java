@@ -16,6 +16,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.ProviderQueryResult;
 
+/**
+ * The activity that is created when the user wants to send a reset password email to the email
+ * the signed up with
+ */
 public class ForgotPasswordActivity extends AppCompatActivity {
 
     private static final String EMPTY_FIELD_ERROR = "Please enter a valid email";

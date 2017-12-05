@@ -20,6 +20,9 @@ import com.google.firebase.database.ValueEventListener;
 import edu.illinois.finalproject.javaobjects.Course;
 import edu.illinois.finalproject.javaobjects.UserInformation;
 
+/**
+ * The activity that is created when the user wants to create a new course
+ */
 public class RegisterCourseActivity extends AppCompatActivity {
 
     private static final String NULL_FIELDS_TOAST = "Please complete all the empty fields";
@@ -62,6 +65,12 @@ public class RegisterCourseActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Override method that will create the settings icon and the back button in the menu bar
+     *
+     * @param menu The menu that the icons are being set to
+     * @return True
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_dashboard, menu);
@@ -69,6 +78,12 @@ public class RegisterCourseActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Override method that controls what happens when you click on one of the icons in the menu bar
+     *
+     * @param item The item in the menu that was clicked on
+     * @return True
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -93,6 +108,10 @@ public class RegisterCourseActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Helper method that will validate all the fields entered. If the create course permission key
+     * is not correct, or if any of the fields are empty, a coruse will not be made.
+     */
     private void validateCourse() {
         final String universityName = universityNameField.getText().toString();
         final String courseTitle = courseTitleField.getText().toString();
@@ -112,6 +131,8 @@ public class RegisterCourseActivity extends AppCompatActivity {
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    // Gets the name for the user and formats it for ease of display later
                     UserInformation userInformation = dataSnapshot.child("users").child
                             (mAuth.getCurrentUser().getUid()).getValue(UserInformation.class);
                     userName[0] = userInformation.getFirstName() + " " + userInformation.getLastName();
@@ -126,6 +147,17 @@ public class RegisterCourseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Helper method that will register the course into the database and will add the course into
+     * creator's enrolled courses
+     *
+     * @param universityName Name of the university
+     * @param courseTerm The term the crouse is a part of
+     * @param courseSection The secion of the course
+     * @param courseYear The year of the course
+     * @param userName The course creator's name
+     * @param courseTitle The title of the course
+     */
     private void registerCourse(String universityName, String courseTerm, String courseSection, String courseYear, String userName, String courseTitle) {
         String userKey = mAuth.getCurrentUser().getUid();
         Course course = new Course(courseTitle, universityName, courseTerm, courseSection, courseYear, userName, userKey);
