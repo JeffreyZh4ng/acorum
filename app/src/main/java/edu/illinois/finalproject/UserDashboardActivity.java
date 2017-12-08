@@ -219,7 +219,7 @@ public class UserDashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(UserDashboardActivity.this, CourseDashboardActivity.class)
-                        .putExtra(key, "courseKey"));
+                        .putExtra("courseKey", key));
             }
         });
 
