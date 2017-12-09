@@ -1,5 +1,6 @@
 package edu.illinois.finalproject.tabfragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,12 +23,14 @@ public class ForumFragment extends Fragment {
     private DatabaseReference mRef;
     private TextView testview;
     private String courseKey;
+    private boolean isInstructor;
 
     public ForumFragment() {}
 
-    public static ForumFragment newInstance(String courseKey) {
+    public static ForumFragment newInstance(String courseKey, boolean isInstructor) {
         Bundle args = new Bundle();
         args.putString("courseKey", courseKey);
+        args.putBoolean("isInstructor", isInstructor);
         ForumFragment fragment = new ForumFragment();
         fragment.setArguments(args);
         return fragment;
@@ -38,6 +41,7 @@ public class ForumFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             courseKey = getArguments().getString("courseKey");
+            isInstructor = getArguments().getBoolean("isInstructor");
         }
 
         mAuth = FirebaseAuth.getInstance();
@@ -49,6 +53,9 @@ public class ForumFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         testview = (TextView) view.findViewById(R.id.testview);
         testview.setText(courseKey);
+        if (isInstructor) {
+            testview.setBackgroundColor(Color.BLUE);
+        }
     }
 
     @Override

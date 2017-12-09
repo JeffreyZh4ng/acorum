@@ -41,6 +41,7 @@ public class CourseDashboardActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private String courseKey;
+    private boolean isInstructor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,8 @@ public class CourseDashboardActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
         courseKey = getIntent().getExtras().getString("courseKey");
+        isInstructor = getIntent().getExtras().getBoolean("isInstructor");
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -133,7 +136,7 @@ public class CourseDashboardActivity extends AppCompatActivity {
                 case 1:
                     return CourseWorkFragment.newInstance(courseKey);
                 case 2:
-                    return ForumFragment.newInstance(courseKey);
+                    return ForumFragment.newInstance(courseKey, isInstructor);
                 default:
                     return null;
             }

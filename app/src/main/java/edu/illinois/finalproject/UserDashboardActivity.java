@@ -132,7 +132,7 @@ public class UserDashboardActivity extends AppCompatActivity {
                     Course course = dataSnapshot.child("courses").child(key).getValue(Course.class);
 
                     setElementText(key, course, view);
-                    setElementOnClick(key, view);
+                    setElementOnClick(key, view, dataSnapshot);
 
                     courseListLayout.addView(view);
                 }
@@ -172,15 +172,18 @@ public class UserDashboardActivity extends AppCompatActivity {
     /**
      * Helper method that sets on click listeners to each of the elements in the list
      *
-     * @param key The courseKey of the course
+     * @param courseKey The courseKey of the course
      * @param view The view of the layout inflater
      */
-    private void setElementOnClick(final String key, View view) {
+    private void setElementOnClick(final String courseKey, View view, final DataSnapshot dataSnapshot) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(UserDashboardActivity.this, CourseDashboardActivity.class)
-                        .putExtra("courseKey", key));
+                HashMap<String, String> courseMap = dataSnapshot.child("courses").child(courseKey).getValue(Course.class).getInstructors();
+                boolean isInstructor = courseMap.containsKey(userKey);
+                Intent intent = new Intent(UserDashboardActivity.this, CourseDashboardActivity.class)
+                        .putExtra("courseKey", courseKey).putExtra("isInstructor", isInstructor);
+                startActivity(intent);
             }
         });
 
