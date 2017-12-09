@@ -23,7 +23,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/courseList" />
 
-
     <LinearLayout
         android:id="@+id/courseList"
         android:layout_width="0dp"

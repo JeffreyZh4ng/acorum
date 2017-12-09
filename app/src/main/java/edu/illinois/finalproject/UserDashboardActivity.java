@@ -81,45 +81,6 @@ public class UserDashboardActivity extends AppCompatActivity {
     }
 
     /**
-     * Override method that will create the settings icon and the back button in the menu bar
-     *
-     * @param menu The menu that the icons are being set to
-     * @return True
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_dashboard, menu);
-        return true;
-    }
-
-    /**
-     * Override method that controls what happens when you click on one of the icons in the menu bar
-     *
-     * @param item The item in the menu that was clicked on
-     * @return True
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.profileButton:
-                startActivity(new Intent(UserDashboardActivity.this, ProfileActivity.class));
-                finish();
-                break;
-            case R.id.profileSettingsButton:
-                startActivity(new Intent(UserDashboardActivity.this, ProfileSettingsActivity.class));
-                finish();
-                break;
-            case R.id.logoutButton:
-                mAuth.signOut();
-                if (mAuth.getCurrentUser() == null) {
-                    startActivity(new Intent(UserDashboardActivity.this, LoginActivity.class));
-                }
-                break;
-        }
-        return true;
-    }
-
-    /**
      * Helper method that sets the title of the activity
      *
      * @param dataSnapshot The dataSnapshot needed to retrieve the users name
@@ -223,5 +184,44 @@ public class UserDashboardActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    /**
+     * Override method that will create the settings icon and the back button in the menu bar
+     *
+     * @param menu The menu that the icons are being set to
+     * @return True
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_dashboard, menu);
+        return true;
+    }
+
+    /**
+     * Override method that controls what happens when you click on one of the icons in the menu bar
+     *
+     * @param item The item in the menu that was clicked on
+     * @return True
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.profileButton:
+                startActivity(new Intent(UserDashboardActivity.this, ProfileActivity.class));
+                finish();
+                break;
+            case R.id.profileSettingsButton:
+                startActivity(new Intent(UserDashboardActivity.this, ProfileSettingsActivity.class));
+                finish();
+                break;
+            case R.id.logoutButton:
+                mAuth.signOut();
+                if (mAuth.getCurrentUser() == null) {
+                    startActivity(new Intent(UserDashboardActivity.this, LoginActivity.class));
+                }
+                break;
+        }
+        return true;
     }
 }

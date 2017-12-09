@@ -22,18 +22,24 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import edu.illinois.finalproject.javaobjects.Course;
 import edu.illinois.finalproject.tabfragments.AnnouncementFragment;
 import edu.illinois.finalproject.tabfragments.CourseWorkFragment;
 import edu.illinois.finalproject.tabfragments.ForumFragment;
 
 public class CourseDashboardActivity extends AppCompatActivity {
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
     private FirebaseAuth mAuth;
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mRef;
     private ViewPager mViewPager;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
     private String courseKey;
 
     @Override
@@ -42,20 +48,32 @@ public class CourseDashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_dashboard);
 
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
+        mRef = mDatabase.getReference();
         courseKey = getIntent().getExtras().getString("courseKey");
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String courseName = dataSnapshot.child("courses").child(courseKey).getValue(Course.class).getCourseName();
+                setTitle(courseName);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /**
