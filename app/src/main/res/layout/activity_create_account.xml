@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.illinois.finalproject.CreateAccountActivity">
+    tools:context="edu.illinois.finalproject.activities.CreateAccountActivity">
 
     <EditText
         android:id="@+id/firstNameField"

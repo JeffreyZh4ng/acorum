@@ -21,7 +21,6 @@ public class ForumFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
-    private TextView testview;
     private String courseKey;
     private boolean isInstructor;
 
@@ -51,11 +50,7 @@ public class ForumFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        testview = (TextView) view.findViewById(R.id.testview);
-        testview.setText(courseKey);
-        if (isInstructor) {
-            testview.setBackgroundColor(Color.BLUE);
-        }
+
     }
 
     @Override

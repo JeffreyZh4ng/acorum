@@ -1,7 +1,9 @@
-package edu.illinois.finalproject;
+package edu.illinois.finalproject.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import edu.illinois.finalproject.R;
 
 public class ProfileActivity extends AppCompatActivity {
 

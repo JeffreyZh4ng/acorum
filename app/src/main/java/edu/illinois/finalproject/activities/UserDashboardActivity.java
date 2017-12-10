@@ -1,4 +1,4 @@
-package edu.illinois.finalproject;
+package edu.illinois.finalproject.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
+import edu.illinois.finalproject.R;
 import edu.illinois.finalproject.javaobjects.Course;
 import edu.illinois.finalproject.javaobjects.UserInformation;
 

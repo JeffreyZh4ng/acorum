@@ -1,4 +1,4 @@
-package edu.illinois.finalproject;
+package edu.illinois.finalproject.activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import edu.illinois.finalproject.R;
 import edu.illinois.finalproject.javaobjects.UserInformation;
 
 /**

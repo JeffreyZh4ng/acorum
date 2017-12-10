@@ -1,4 +1,4 @@
-package edu.illinois.finalproject;
+package edu.illinois.finalproject.activities;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -13,6 +13,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import edu.illinois.finalproject.R;
 
 /**
  * The initial activity that will be created when the user has to log in
