@@ -125,7 +125,7 @@ public class CourseDashboardActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return AnnouncementFragment.newInstance(courseKey);
+                    return AnnouncementFragment.newInstance(courseKey, isInstructor);
                 case 1:
                     return CourseWorkFragment.newInstance(courseKey);
                 case 2:
