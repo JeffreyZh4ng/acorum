@@ -3,9 +3,8 @@ package edu.illinois.finalproject.javaobjects;
 import java.util.HashMap;
 
 /**
- * Created by jeffreyzhang on 12/9/17.
+ * Java object that contains a list of announcements
  */
-
 public class AnnouncementList {
 
     private int announcementCount = 0;
@@ -32,8 +31,8 @@ public class AnnouncementList {
     }
 
     //Needs work
-    public void deleteAnnouncement (int index) {
-        announcements.remove(index);
+    public void deleteAnnouncement (String key) {
+        announcements.remove(key);
     }
 
 }

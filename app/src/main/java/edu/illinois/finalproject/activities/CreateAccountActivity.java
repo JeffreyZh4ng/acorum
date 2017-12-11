@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import edu.illinois.finalproject.Constants;
 import edu.illinois.finalproject.R;
 import edu.illinois.finalproject.javaobjects.UserInformation;
 
@@ -89,9 +90,9 @@ public class CreateAccountActivity extends AppCompatActivity {
         String lastName = lastNameField.getText().toString();
         String email = emailField.getText().toString();
         String password = passwordField.getText().toString();
-        String confirmPassowrd = confirmPasswordField.getText().toString();
+        String confirmPassword = confirmPasswordField.getText().toString();
 
-        if (!password.equals(confirmPassowrd)) {
+        if (!password.equals(confirmPassword)) {
             Toast.makeText(CreateAccountActivity.this, PASSWORDS_DONT_MATCH, Toast.LENGTH_LONG).show();
         }
         else if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
@@ -114,7 +115,7 @@ public class CreateAccountActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Toast.makeText(CreateAccountActivity.this, ACCOUNT_CREATION_SUCCESS, Toast.LENGTH_LONG).show();
                     FirebaseUser user = mAuth.getCurrentUser();
-                    mRef.child("users").child(user.getUid()).setValue(new UserInformation(firstName, lastName, email));
+                    mRef.child(Constants.USERS_CHILD).child(user.getUid()).setValue(new UserInformation(firstName, lastName, email));
                     startActivity(new Intent(CreateAccountActivity.this, LoginActivity.class));
                     finish();
                 } else {

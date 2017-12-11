@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
+import edu.illinois.finalproject.Constants;
 import edu.illinois.finalproject.R;
 import edu.illinois.finalproject.javaobjects.Course;
 import edu.illinois.finalproject.javaobjects.UserInformation;
@@ -29,6 +30,8 @@ import edu.illinois.finalproject.javaobjects.UserInformation;
  * classes. They can also pick a class to go to its course dashboard.
  */
 public class UserDashboardActivity extends AppCompatActivity {
+
+    private static final String WELCOME_MESSAGE = "Welcome, ";
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
@@ -87,12 +90,12 @@ public class UserDashboardActivity extends AppCompatActivity {
      * @param dataSnapshot The dataSnapshot needed to retrieve the users name
      */
     private void setWelcomeMessage(DataSnapshot dataSnapshot) {
-        StringBuilder message = new StringBuilder("Welcome, ");
+        StringBuilder message = new StringBuilder(WELCOME_MESSAGE);
 
-        String userFirstName = dataSnapshot.child("users").child(userKey).getValue(UserInformation.class).getFirstName();
+        String userFirstName = dataSnapshot.child(Constants.USERS_CHILD).child(userKey).getValue(UserInformation.class).getFirstName();
         message.append(userFirstName);
         message.append(" ");
-        String userLastName = dataSnapshot.child("users").child(userKey).getValue(UserInformation.class).getLastName();
+        String userLastName = dataSnapshot.child(Constants.USERS_CHILD).child(userKey).getValue(UserInformation.class).getLastName();
         message.append(userLastName);
 
         setTitle(message);
@@ -105,7 +108,7 @@ public class UserDashboardActivity extends AppCompatActivity {
      * @param dataSnapshot The dataSnapshot needed to retrieve the list of courses the user is in
      */
     private void setEnrollAlert(DataSnapshot dataSnapshot) {
-        int enrolledClassesCount = dataSnapshot.child("users").child(userKey)
+        int enrolledClassesCount = dataSnapshot.child(Constants.USERS_CHILD).child(userKey)
                 .getValue(UserInformation.class).getEnrolledCourses().size();
 
         if (enrolledClassesCount == 0) {
@@ -121,7 +124,7 @@ public class UserDashboardActivity extends AppCompatActivity {
      * @param dataSnapshot The dataSnapshot needed to retrieve the list of courses the user is in
      */
     private void setClassList(DataSnapshot dataSnapshot) {
-        HashMap<String, Boolean> courseList = dataSnapshot.child("users").child(userKey).
+        HashMap<String, Boolean> courseList = dataSnapshot.child(Constants.USERS_CHILD).child(userKey).
                 getValue(UserInformation.class).getEnrolledCourses();
 
         for (final String key: courseList.keySet()) {
@@ -130,7 +133,7 @@ public class UserDashboardActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     View view = LayoutInflater.from(courseListLayout.getContext()).inflate
                             (R.layout.activity_course_list_element, courseListLayout, false);
-                    Course course = dataSnapshot.child("courses").child(key).getValue(Course.class);
+                    Course course = dataSnapshot.child(Constants.COURSES_CHILD).child(key).getValue(Course.class);
 
                     setElementText(key, course, view);
                     setElementOnClick(key, view, dataSnapshot);
@@ -171,7 +174,8 @@ public class UserDashboardActivity extends AppCompatActivity {
     }
 
     /**
-     * Helper method that sets on click listeners to each of the elements in the list
+     * Helper method that sets on click listeners to each of the elements in the list and adds in the
+     * extra arguemnts needed for the course dashboard activity
      *
      * @param courseKey The courseKey of the course
      * @param view The view of the layout inflater
@@ -180,10 +184,12 @@ public class UserDashboardActivity extends AppCompatActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HashMap<String, String> courseMap = dataSnapshot.child("courses").child(courseKey).getValue(Course.class).getInstructors();
+                HashMap<String, String> courseMap = dataSnapshot.child(Constants.COURSES_CHILD)
+                        .child(courseKey).getValue(Course.class).getInstructors();
                 boolean isInstructor = courseMap.containsKey(userKey);
+
                 Intent intent = new Intent(UserDashboardActivity.this, CourseDashboardActivity.class)
-                        .putExtra("courseKey", courseKey).putExtra("isInstructor", isInstructor);
+                        .putExtra(Constants.COURSE_KEY_ARG, courseKey).putExtra(Constants.IS_INSTRUCTOR_ARG, isInstructor);
                 startActivity(intent);
             }
         });

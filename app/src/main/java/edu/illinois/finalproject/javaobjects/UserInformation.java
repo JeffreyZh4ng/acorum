@@ -19,7 +19,6 @@ public class UserInformation {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        //enrolledCourses.put("Placeholder Class", false);
     }
 
     public void addCourse(String course) {

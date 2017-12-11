@@ -12,12 +12,16 @@ import edu.illinois.finalproject.R;
 import edu.illinois.finalproject.javaobjects.AnnouncementList;
 import edu.illinois.finalproject.javaobjects.Announcement;
 
+/**
+ * Adapter for the announcement recycler view that displays the announcements
+ */
 public class AnnouncementRecyclerAdapter extends RecyclerView.Adapter<AnnouncementRecyclerAdapter.ViewHolder> {
     private HashMap<String, Announcement> announcements;
 
     public AnnouncementRecyclerAdapter(AnnouncementList announcements) {
         this.announcements = announcements.getAnnouncements();
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -26,6 +30,12 @@ public class AnnouncementRecyclerAdapter extends RecyclerView.Adapter<Announceme
         return new ViewHolder(announcementElement);
     }
 
+    /**
+     * Sets the text for each announcement in the recycler view
+     *
+     * @param holder The holder for the data
+     * @param position The position of the announcement in the view
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Announcement announcement = announcements.get((String.valueOf(position) + "_key"));
@@ -44,6 +54,9 @@ public class AnnouncementRecyclerAdapter extends RecyclerView.Adapter<Announceme
         return announcements.size();
     }
 
+    /**
+     * The view holder inner class that sets the layout of each element in the list
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public View itemView;

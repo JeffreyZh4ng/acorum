@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import edu.illinois.finalproject.Constants;
 import edu.illinois.finalproject.R;
 import edu.illinois.finalproject.javaobjects.Course;
 
@@ -52,6 +53,46 @@ public class EnrollActivity extends AppCompatActivity {
             public void onClick(View view) {
                 joinCourseListener();
             }
+        });
+    }
+
+    /**
+     * Helper method that will enroll the student in a course. Checks if the text field is empty. If
+     * not, it will call another helper
+     */
+    private void joinCourseListener() {
+        courseKey = courseEnrollKeyField.getText().toString();
+        if (courseKey.isEmpty()) {
+            Toast.makeText(EnrollActivity.this, EMPTY_FIELD_ERROR, Toast.LENGTH_LONG).show();
+        } else {
+            enrollStudent();
+        }
+    }
+
+    /**
+     * Helper that will enter the course info into the users profile in the database. Will check if
+     * key that was entered exists first and will increment the enrollment of the class. If the course
+     * does not exist the student cannot register for the course
+     */
+    private void enrollStudent() {
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot courseData = dataSnapshot.child(Constants.COURSES_CHILD).child(courseKey);
+                if (courseData.exists()) {
+                    String userKey = mAuth.getCurrentUser().getUid();
+                    int enrollment = courseData.getValue(Course.class).getEnrollment() + 1;
+                    courseData.getValue(Course.class).setEnrollment(enrollment);
+                    mRef.child(Constants.USERS_CHILD).child(userKey)
+                            .child(Constants.ENROLLED_COURSES_CHILD).child(courseKey).setValue(true);
+                    startActivity(new Intent(EnrollActivity.this, UserDashboardActivity.class));
+                } else {
+                    Toast.makeText(EnrollActivity.this, COURSE_DOESNT_EXIST, Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
         });
     }
 
@@ -96,43 +137,5 @@ public class EnrollActivity extends AppCompatActivity {
                 break;
         }
         return true;
-    }
-
-    /**
-     * Helper method that will enroll the student in a course. Checks if the text field is empty. If
-     * not, it will call another helper
-     */
-    private void joinCourseListener() {
-        courseKey = courseEnrollKeyField.getText().toString();
-        if (courseKey.isEmpty()) {
-            Toast.makeText(EnrollActivity.this, EMPTY_FIELD_ERROR, Toast.LENGTH_LONG).show();
-        } else {
-            enrollStudent();
-        }
-    }
-
-    /**
-     * Helper that will enter the course info into the users profile in the database. Will check if
-     * key that was entered exists first and will increment the enrollment of the class
-     */
-    private void enrollStudent() {
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot courseData = dataSnapshot.child("courses").child(courseKey);
-                if (courseData.exists()) {
-                    String userKey = mAuth.getCurrentUser().getUid();
-                    int enrollment = courseData.getValue(Course.class).getEnrollment() + 1;
-                    courseData.getValue(Course.class).setEnrollment(enrollment);
-                    mRef.child("users").child(userKey).child("enrolledCourses").child(courseKey).setValue(true);
-                    startActivity(new Intent(EnrollActivity.this, UserDashboardActivity.class));
-                } else {
-                    Toast.makeText(EnrollActivity.this, COURSE_DOESNT_EXIST, Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
     }
 }

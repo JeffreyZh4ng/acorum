@@ -1,12 +1,8 @@
 package edu.illinois.finalproject.javaobjects;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 /**
- * Created by jeffreyzhang on 12/9/17.
+ * Java object that contains data for each announcement made
  */
-
 public class Announcement {
 
     private String title;

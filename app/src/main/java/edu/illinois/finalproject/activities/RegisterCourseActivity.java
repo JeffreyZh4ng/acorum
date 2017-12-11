@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import edu.illinois.finalproject.Constants;
 import edu.illinois.finalproject.R;
 import edu.illinois.finalproject.javaobjects.Announcement;
 import edu.illinois.finalproject.javaobjects.AnnouncementList;
@@ -72,6 +73,62 @@ public class RegisterCourseActivity extends AppCompatActivity {
     }
 
     /**
+     * Helper method that will validate all the fields entered. If the create course permission key
+     * is not correct, or if any of the fields are empty, a coruse will not be made.
+     */
+    private void validateCourse() {
+        final String universityName = universityNameField.getText().toString();
+        final String courseTitle = courseTitleField.getText().toString();
+        final String courseSection = courseSectionField.getText().toString();
+        final String courseYear = courseYearField.getText().toString();
+        final String courseTerm = courseTermField.getText().toString();
+        String registerCourseKey = registerCourseKeyField.getText().toString();
+
+        if (!registerCourseKey.equals(CREATE_COURSE_PERMISSION_KEY)) {
+            Toast.makeText(RegisterCourseActivity.this, KEYS_DONT_MATCH, Toast.LENGTH_LONG).show();
+        }
+        else if (universityName.isEmpty() || courseTitle.isEmpty() || courseYear.isEmpty() || courseSection.isEmpty()
+                || courseTerm.isEmpty() || registerCourseKey.isEmpty()) {
+            Toast.makeText(RegisterCourseActivity.this, NULL_FIELDS_TOAST, Toast.LENGTH_LONG).show();
+        } else {
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    // Gets the name for the user and formats it for ease of display later
+                    UserInformation userInformation = dataSnapshot.child(Constants.USERS_CHILD)
+                            .child(mAuth.getCurrentUser().getUid()).getValue(UserInformation.class);
+                    String userName = userInformation.getFirstName() + " " + userInformation.getLastName();
+
+                    Course course = new Course(courseTitle, universityName, courseTerm, courseSection, courseYear, userName, userKey);
+                    registerCourse(course);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    
+                }
+            });
+        }
+    }
+
+    /**
+     * Helper method that will register the course into the database and will add the course into
+     * creator's enrolled courses
+     *
+     * @param course The course that is being created
+     */
+    private void registerCourse(Course course) {
+        String courseKey = mRef.child(Constants.COURSES_CHILD).push().getKey();
+        mRef.child(Constants.COURSES_CHILD).child(courseKey).setValue(course);
+        mRef.child(Constants.USERS_CHILD).child(userKey).child(Constants.ENROLLED_COURSES_CHILD).child(courseKey).setValue(true);
+        mRef.child(Constants.COURSE_ANNOUNCEMENTS_CHILD).child(courseKey).setValue(new AnnouncementList());
+
+        Toast.makeText(RegisterCourseActivity.this, COURSE_CREATION_SUCCESS, Toast.LENGTH_LONG).show();
+        startActivity(new Intent(RegisterCourseActivity.this, UserDashboardActivity.class));
+    }
+
+    /**
      * Override method that will create the settings icon and the back button in the menu bar
      *
      * @param menu The menu that the icons are being set to
@@ -112,59 +169,5 @@ public class RegisterCourseActivity extends AppCompatActivity {
                 break;
         }
         return true;
-    }
-
-    /**
-     * Helper method that will validate all the fields entered. If the create course permission key
-     * is not correct, or if any of the fields are empty, a coruse will not be made.
-     */
-    private void validateCourse() {
-        final String universityName = universityNameField.getText().toString();
-        final String courseTitle = courseTitleField.getText().toString();
-        final String courseSection = courseSectionField.getText().toString();
-        final String courseYear = courseYearField.getText().toString();
-        final String courseTerm = courseTermField.getText().toString();
-        String registerCourseKey = registerCourseKeyField.getText().toString();
-
-        if (!registerCourseKey.equals(CREATE_COURSE_PERMISSION_KEY)) {
-            Toast.makeText(RegisterCourseActivity.this, KEYS_DONT_MATCH, Toast.LENGTH_LONG).show();
-        }
-        else if (universityName.isEmpty() || courseTitle.isEmpty() || courseYear.isEmpty() || courseSection.isEmpty()
-                || courseTerm.isEmpty() || registerCourseKey.isEmpty()) {
-            Toast.makeText(RegisterCourseActivity.this, NULL_FIELDS_TOAST, Toast.LENGTH_LONG).show();
-        } else {
-            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    // Gets the name for the user and formats it for ease of display later
-                    UserInformation userInformation = dataSnapshot.child("users").child
-                            (mAuth.getCurrentUser().getUid()).getValue(UserInformation.class);
-                    String userName = userInformation.getFirstName() + " " + userInformation.getLastName();
-                    Course course = new Course(courseTitle, universityName, courseTerm, courseSection, courseYear, userName, userKey);
-                    registerCourse(course);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    
-                }
-            });
-        }
-    }
-
-    /**
-     * Helper method that will register the course into the database and will add the course into
-     * creator's enrolled courses
-     *
-     * @param course The course that is being created
-     */
-    private void registerCourse(Course course) {
-        String courseKey = mRef.child("courses").push().getKey();
-        mRef.child("courses").child(courseKey).setValue(course);
-        mRef.child("users").child(userKey).child("enrolledCourses").child(courseKey).setValue(true);
-        mRef.child("courseAnnouncements").child(courseKey).setValue(new AnnouncementList());
-        Toast.makeText(RegisterCourseActivity.this, COURSE_CREATION_SUCCESS, Toast.LENGTH_LONG).show();
-        startActivity(new Intent(RegisterCourseActivity.this, UserDashboardActivity.class));
     }
 }

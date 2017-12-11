@@ -23,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String INVALID_CREDENTIALS_TOAST = "Invalid Email/Password";
     private static final String NULL_CREDENTIALS_TOAST = "Please enter an Email/Password";
+    private static final String LOGIN_TITLE = "Acorum - Login";
 
     private FirebaseAuth mAuth;
     private EditText emailField;
@@ -46,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         createAccountButton = (Button) findViewById(R.id.createAccountButton);
         forgotPasswordButton = (Button) findViewById(R.id.forgotPasswordButton);
 
-        setTitle("Acorum - Login");
+        setTitle(LOGIN_TITLE);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

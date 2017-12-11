@@ -20,12 +20,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import edu.illinois.finalproject.Constants;
 import edu.illinois.finalproject.R;
 import edu.illinois.finalproject.javaobjects.Course;
 import edu.illinois.finalproject.tabfragments.AnnouncementFragment;
 import edu.illinois.finalproject.tabfragments.CourseWorkFragment;
 import edu.illinois.finalproject.tabfragments.ForumFragment;
 
+/**
+ * The dashboard for a course after the user navigates to it from the user dashboard activity. Displays
+ * the data for a course
+ */
 public class CourseDashboardActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -44,8 +49,8 @@ public class CourseDashboardActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
-        courseKey = getIntent().getExtras().getString("courseKey");
-        isInstructor = getIntent().getExtras().getBoolean("isInstructor");
+        courseKey = getIntent().getExtras().getString(Constants.COURSE_KEY_ARG);
+        isInstructor = getIntent().getExtras().getBoolean(Constants.IS_INSTRUCTOR_ARG);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -58,6 +63,7 @@ public class CourseDashboardActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        // Sets the title of the activity to the course name
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -115,7 +121,14 @@ public class CourseDashboardActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Page adapter innerclass that sets the tabs to their respective fragments
+     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        private static final String ANNOUNCEMENT_TAB_TITLE = "Announcements";
+        private static final String CLASS_WORK_TAB_TITLE = "In Class";
+        private static final String FORUM_TAB_TITLE = "Forum";
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -137,7 +150,6 @@ public class CourseDashboardActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
             return 3;
         }
 
@@ -145,11 +157,11 @@ public class CourseDashboardActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Announcements";
+                    return ANNOUNCEMENT_TAB_TITLE;
                 case 1:
-                    return "In Class";
+                    return CLASS_WORK_TAB_TITLE;
                 case 2:
-                    return "Forum";
+                    return FORUM_TAB_TITLE;
             }
             return null;
         }
