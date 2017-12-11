@@ -7,17 +7,17 @@ import java.util.HashMap;
  * Created by jeffreyzhang on 12/9/17.
  */
 
-public class CourseAnnouncement {
+public class Announcement {
 
     private String title;
     private String datePosted;
     private String timePosted;
     private String message;
 
-    public CourseAnnouncement() {
+    public Announcement() {
     }
 
-    public CourseAnnouncement(String title, String datePosted, String timePosted, String message) {
+    public Announcement(String title, String datePosted, String timePosted, String message) {
         this.title = title;
         this.datePosted = datePosted;
         this.timePosted = timePosted;

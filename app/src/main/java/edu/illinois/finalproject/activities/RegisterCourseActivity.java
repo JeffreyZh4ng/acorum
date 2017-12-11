@@ -19,6 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import edu.illinois.finalproject.R;
+import edu.illinois.finalproject.javaobjects.Announcement;
+import edu.illinois.finalproject.javaobjects.AnnouncementList;
 import edu.illinois.finalproject.javaobjects.Course;
 import edu.illinois.finalproject.javaobjects.UserInformation;
 
@@ -162,9 +164,12 @@ public class RegisterCourseActivity extends AppCompatActivity {
     private void registerCourse(String universityName, String courseTerm, String courseSection, String courseYear, String userName, String courseTitle) {
         String userKey = mAuth.getCurrentUser().getUid();
         Course course = new Course(courseTitle, universityName, courseTerm, courseSection, courseYear, userName, userKey);
-        String key = mRef.child("courses").push().getKey();
-        mRef.child("courses").child(key).setValue(course);
-        mRef.child("users").child(userKey).child("enrolledCourses").child(key).setValue(true);
+        String courseKey = mRef.child("courses").push().getKey();
+        mRef.child("courses").child(courseKey).setValue(course);
+        mRef.child("users").child(userKey).child("enrolledCourses").child(courseKey).setValue(true);
+        AnnouncementList announcementList = new AnnouncementList();
+        announcementList.addAnnouncement(new Announcement("HELLO", "12/4/17", "11:40", "Message here!"));
+        mRef.child("courseAnnouncements").child(courseKey).setValue(announcementList);
         Toast.makeText(RegisterCourseActivity.this, COURSE_CREATION_SUCCESS, Toast.LENGTH_LONG).show();
         startActivity(new Intent(RegisterCourseActivity.this, UserDashboardActivity.class));
     }

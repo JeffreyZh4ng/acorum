@@ -1,6 +1,6 @@
 package edu.illinois.finalproject.javaobjects;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by jeffreyzhang on 12/9/17.
@@ -8,20 +8,32 @@ import java.util.ArrayList;
 
 public class AnnouncementList {
 
-    private ArrayList<CourseAnnouncement> courseAnnouncements;
+    private int announcementCount = 0;
+    private HashMap<String, Announcement> announcements = new HashMap<>();
 
     public AnnouncementList() {
     }
 
-    public ArrayList<CourseAnnouncement> getCourseAnnouncements() {
-        return courseAnnouncements;
+    public int getAnnouncementCount() {
+        return announcementCount;
     }
 
-    public void addAnnouncement(CourseAnnouncement courseAnnouncement) {
-        courseAnnouncements.add(courseAnnouncement);
+    public void setAnnouncementCount(int announcementCount) {
+        this.announcementCount = announcementCount;
     }
 
-    public void removeAnnouncement(CourseAnnouncement courseAnnouncement) {
-        courseAnnouncements.remove(courseAnnouncement);
+    public HashMap<String, Announcement> getAnnouncements() {
+        return announcements;
     }
+
+    public void addAnnouncement (Announcement announcement) {
+        announcements.put((Integer.toString(announcementCount) + "_key"), announcement);
+        announcementCount++;
+    }
+
+    //Needs work
+    public void deleteAnnouncement (int index) {
+        announcements.remove(index);
+    }
+
 }

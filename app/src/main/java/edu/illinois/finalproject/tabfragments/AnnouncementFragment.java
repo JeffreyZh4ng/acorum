@@ -1,7 +1,5 @@
 package edu.illinois.finalproject.tabfragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -25,11 +24,11 @@ import edu.illinois.finalproject.recycleradapters.AnnouncementRecyclerAdapter;
 
 public class AnnouncementFragment extends Fragment {
 
-    private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
     private RecyclerView announcementRecycler;
     private Button postAnnouncementButton;
+    private TextView announcementAlert;
     private String courseKey;
     private boolean isInstructor;
 
@@ -52,7 +51,6 @@ public class AnnouncementFragment extends Fragment {
             isInstructor = getArguments().getBoolean("isInstructor");
         }
 
-        mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
     }
@@ -60,15 +58,20 @@ public class AnnouncementFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         postAnnouncementButton = (Button) view.findViewById(R.id.postAnnouncementButton);
+        announcementRecycler = (RecyclerView) view.findViewById(R.id.announcementRecycler);
+        announcementAlert = (TextView) view.findViewById(R.id.announcementAlert);
         if (!isInstructor) {
             postAnnouncementButton.setVisibility(View.GONE);
         }
 
-        /*mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 AnnouncementList announcementList = dataSnapshot.child("courseAnnouncements")
                         .child(courseKey).getValue(AnnouncementList.class);
+                if (announcementList.getAnnouncements().size() != 0) {
+                    announcementAlert.setVisibility(View.GONE);
+                }
                 AnnouncementRecyclerAdapter adapter = new AnnouncementRecyclerAdapter(announcementList);
                 announcementRecycler.setAdapter(adapter);
                 announcementRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -76,7 +79,7 @@ public class AnnouncementFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {}
-        });*/
+        });
     }
 
     @Override

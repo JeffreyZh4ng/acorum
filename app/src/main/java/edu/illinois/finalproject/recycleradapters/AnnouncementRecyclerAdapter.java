@@ -6,17 +6,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import edu.illinois.finalproject.R;
 import edu.illinois.finalproject.javaobjects.AnnouncementList;
-import edu.illinois.finalproject.javaobjects.CourseAnnouncement;
+import edu.illinois.finalproject.javaobjects.Announcement;
 
 public class AnnouncementRecyclerAdapter extends RecyclerView.Adapter<AnnouncementRecyclerAdapter.ViewHolder> {
-    private AnnouncementList announcementList;
+    private HashMap<String, Announcement> announcements;
 
-    public AnnouncementRecyclerAdapter(AnnouncementList announcementList) {
-        this.announcementList = announcementList;
+    public AnnouncementRecyclerAdapter(AnnouncementList announcements) {
+        this.announcements = announcements.getAnnouncements();
     }
 
     @Override
@@ -28,7 +28,7 @@ public class AnnouncementRecyclerAdapter extends RecyclerView.Adapter<Announceme
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        CourseAnnouncement announcement = announcementList.getCourseAnnouncements().get(position);
+        Announcement announcement = announcements.get((String.valueOf(position) + "_key"));
         holder.announcementTitleField.setText(announcement.getTitle());
         holder.announcementMessageField.setText(announcement.getMessage());
 
@@ -41,7 +41,7 @@ public class AnnouncementRecyclerAdapter extends RecyclerView.Adapter<Announceme
 
     @Override
     public int getItemCount() {
-        return announcementList.getCourseAnnouncements().size();
+        return announcements.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
