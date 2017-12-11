@@ -44,6 +44,7 @@ public class RegisterCourseActivity extends AppCompatActivity {
     private EditText courseTermField;
     private EditText registerCourseKeyField;
     private Button registerCourseButton;
+    private String userKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class RegisterCourseActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
+        userKey = mAuth.getCurrentUser().getUid();
 
         universityNameField = (EditText) findViewById(R.id.universityNameField);
         courseTitleField = (EditText) findViewById(R.id.courseTitleField);
@@ -139,7 +141,8 @@ public class RegisterCourseActivity extends AppCompatActivity {
                     UserInformation userInformation = dataSnapshot.child("users").child
                             (mAuth.getCurrentUser().getUid()).getValue(UserInformation.class);
                     String userName = userInformation.getFirstName() + " " + userInformation.getLastName();
-                    registerCourse(universityName, courseTerm, courseSection, courseYear, userName, courseTitle);
+                    Course course = new Course(courseTitle, universityName, courseTerm, courseSection, courseYear, userName, userKey);
+                    registerCourse(course);
                 }
 
                 @Override
@@ -154,22 +157,13 @@ public class RegisterCourseActivity extends AppCompatActivity {
      * Helper method that will register the course into the database and will add the course into
      * creator's enrolled courses
      *
-     * @param universityName Name of the university
-     * @param courseTerm The term the crouse is a part of
-     * @param courseSection The secion of the course
-     * @param courseYear The year of the course
-     * @param userName The course creator's name
-     * @param courseTitle The title of the course
+     * @param course The course that is being created
      */
-    private void registerCourse(String universityName, String courseTerm, String courseSection, String courseYear, String userName, String courseTitle) {
-        String userKey = mAuth.getCurrentUser().getUid();
-        Course course = new Course(courseTitle, universityName, courseTerm, courseSection, courseYear, userName, userKey);
+    private void registerCourse(Course course) {
         String courseKey = mRef.child("courses").push().getKey();
         mRef.child("courses").child(courseKey).setValue(course);
         mRef.child("users").child(userKey).child("enrolledCourses").child(courseKey).setValue(true);
-        AnnouncementList announcementList = new AnnouncementList();
-        announcementList.addAnnouncement(new Announcement("HELLO", "12/4/17", "11:40", "Message here!"));
-        mRef.child("courseAnnouncements").child(courseKey).setValue(announcementList);
+        mRef.child("courseAnnouncements").child(courseKey).setValue(new AnnouncementList());
         Toast.makeText(RegisterCourseActivity.this, COURSE_CREATION_SUCCESS, Toast.LENGTH_LONG).show();
         startActivity(new Intent(RegisterCourseActivity.this, UserDashboardActivity.class));
     }

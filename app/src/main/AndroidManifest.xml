@@ -30,7 +30,8 @@
             android:name=".activities.CourseDashboardActivity"
             android:label="@string/title_activity_course_dashboard"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".listelements.AnnouncementListElement"></activity>
+        <activity android:name=".listelements.AnnouncementListElement" />
+        <activity android:name=".activities.PostAnnouncementActivity"></activity>
     </application>
 
 </manifest>
