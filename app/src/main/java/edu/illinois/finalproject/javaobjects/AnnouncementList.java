@@ -7,32 +7,16 @@ import java.util.HashMap;
  */
 public class AnnouncementList {
 
-    private int announcementCount = 0;
     private HashMap<String, Announcement> announcements = new HashMap<>();
 
     public AnnouncementList() {
-    }
-
-    public int getAnnouncementCount() {
-        return announcementCount;
-    }
-
-    public void setAnnouncementCount(int announcementCount) {
-        this.announcementCount = announcementCount;
     }
 
     public HashMap<String, Announcement> getAnnouncements() {
         return announcements;
     }
 
-    public void addAnnouncement (Announcement announcement) {
-        announcements.put((Integer.toString(announcementCount) + "_key"), announcement);
-        announcementCount++;
+    public void setAnnouncements(HashMap<String, Announcement> announcements) {
+        this.announcements = announcements;
     }
-
-    //Needs work
-    public void deleteAnnouncement (String key) {
-        announcements.remove(key);
-    }
-
 }

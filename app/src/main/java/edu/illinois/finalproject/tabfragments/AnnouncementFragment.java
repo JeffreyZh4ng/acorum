@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 import edu.illinois.finalproject.Constants;
 import edu.illinois.finalproject.R;
 import edu.illinois.finalproject.activities.PostAnnouncementActivity;
+import edu.illinois.finalproject.javaobjects.Announcement;
 import edu.illinois.finalproject.javaobjects.AnnouncementList;
 import edu.illinois.finalproject.recycleradapters.AnnouncementRecyclerAdapter;
 
@@ -84,22 +88,33 @@ public class AnnouncementFragment extends Fragment {
         announcementRecycler = (RecyclerView) view.findViewById(R.id.announcementRecycler);
         announcementAlert = (TextView) view.findViewById(R.id.announcementAlert);
 
-        // If the user is an instructor, allow them to post announcements
         if (!isInstructor) {
             postAnnouncementButton.setVisibility(View.GONE);
         }
+        postAnnouncementButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), PostAnnouncementActivity.class)
+                        .putExtra(Constants.COURSE_KEY_ARG, courseKey));
+            }
+        });
 
-        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                // If there have been no announcements made, give the alert
-                AnnouncementList announcementList = dataSnapshot.child(Constants.COURSE_ANNOUNCEMENTS_CHILD)
-                        .child(courseKey).getValue(AnnouncementList.class);
-                if (announcementList.getAnnouncements().size() != 0) {
+                AnnouncementList announcementList = new AnnouncementList();
+                HashMap<String, Announcement> announcementHashMap = new HashMap<>();
+                for (DataSnapshot announcementSnapshot: dataSnapshot.child(Constants.COURSE_ANNOUNCEMENTS_CHILD)
+                        .child(courseKey).getChildren()) {
+                    Announcement announcement = announcementSnapshot.getValue(Announcement.class);
+                    announcementHashMap.put(announcementSnapshot.getKey(), announcement);
+                }
+                if (announcementHashMap.size() != 0) {
                     announcementAlert.setVisibility(View.GONE);
                 }
 
+                announcementList.setAnnouncements(announcementHashMap);
                 AnnouncementRecyclerAdapter adapter = new AnnouncementRecyclerAdapter(announcementList);
                 announcementRecycler.setAdapter(adapter);
                 announcementRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
@@ -107,13 +122,6 @@ public class AnnouncementFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {}
-        });
-
-        postAnnouncementButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), PostAnnouncementActivity.class));
-            }
         });
     }
 

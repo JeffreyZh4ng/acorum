@@ -7,16 +7,14 @@ public class Announcement {
 
     private String title;
     private String datePosted;
-    private String timePosted;
     private String message;
 
     public Announcement() {
     }
 
-    public Announcement(String title, String datePosted, String timePosted, String message) {
+    public Announcement(String title, String datePosted, String message) {
         this.title = title;
         this.datePosted = datePosted;
-        this.timePosted = timePosted;
         this.message = message;
     }
 
@@ -34,14 +32,6 @@ public class Announcement {
 
     public void setDatePosted(String datePosted) {
         this.datePosted = datePosted;
-    }
-
-    public String getTimePosted() {
-        return timePosted;
-    }
-
-    public void setTimePosted(String timePosted) {
-        this.timePosted = timePosted;
     }
 
     public String getMessage() {

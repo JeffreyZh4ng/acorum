@@ -49,12 +49,13 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="0dp"
         android:gravity="center"
         android:text="No announcements to show!"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/announcementRecycler" />
+        app:layout_constraintTop_toBottomOf="@+id/announcementRecycler"
+        app:layout_constraintHorizontal_bias="0.0" />
 </android.support.constraint.ConstraintLayout>

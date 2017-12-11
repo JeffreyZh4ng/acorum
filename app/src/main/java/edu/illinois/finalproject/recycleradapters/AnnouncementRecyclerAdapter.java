@@ -22,7 +22,6 @@ public class AnnouncementRecyclerAdapter extends RecyclerView.Adapter<Announceme
         this.announcements = announcements.getAnnouncements();
     }
 
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View announcementElement = LayoutInflater.from(parent.getContext())
@@ -41,12 +40,7 @@ public class AnnouncementRecyclerAdapter extends RecyclerView.Adapter<Announceme
         Announcement announcement = announcements.get((String.valueOf(position) + "_key"));
         holder.announcementTitleField.setText(announcement.getTitle());
         holder.announcementMessageField.setText(announcement.getMessage());
-
-        StringBuilder announcementInfo = new StringBuilder("Posted on ");
-        announcementInfo.append(announcement.getDatePosted());
-        announcementInfo.append(" at ");
-        announcementInfo.append(announcement.getTimePosted());
-        holder.announcementInfoField.setText(announcementInfo);
+        holder.announcementInfoField.setText("Posted on " + announcement.getDatePosted());
     }
 
     @Override
