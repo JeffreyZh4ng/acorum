@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -117,7 +118,10 @@ public class AnnouncementFragment extends Fragment {
                 announcementList.setAnnouncements(announcementHashMap);
                 AnnouncementRecyclerAdapter adapter = new AnnouncementRecyclerAdapter(announcementList);
                 announcementRecycler.setAdapter(adapter);
-                announcementRecycler.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                layoutManager.setReverseLayout(true);
+                layoutManager.setStackFromEnd(true);
+                announcementRecycler.setLayoutManager(layoutManager);
             }
 
             @Override
