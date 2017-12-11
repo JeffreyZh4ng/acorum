@@ -3,6 +3,7 @@ package edu.illinois.finalproject.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -128,7 +129,6 @@ public class RegisterCourseActivity extends AppCompatActivity {
                 || courseTerm.isEmpty() || registerCourseKey.isEmpty()) {
             Toast.makeText(RegisterCourseActivity.this, NULL_FIELDS_TOAST, Toast.LENGTH_LONG).show();
         } else {
-            final String[] userName = new String[1];
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -136,13 +136,13 @@ public class RegisterCourseActivity extends AppCompatActivity {
                     // Gets the name for the user and formats it for ease of display later
                     UserInformation userInformation = dataSnapshot.child("users").child
                             (mAuth.getCurrentUser().getUid()).getValue(UserInformation.class);
-                    userName[0] = userInformation.getFirstName() + " " + userInformation.getLastName();
-                    registerCourse(universityName, courseTerm, courseSection, courseYear, userName[0], courseTitle);
+                    String userName = userInformation.getFirstName() + " " + userInformation.getLastName();
+                    registerCourse(universityName, courseTerm, courseSection, courseYear, userName, courseTitle);
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    
                 }
             });
         }
