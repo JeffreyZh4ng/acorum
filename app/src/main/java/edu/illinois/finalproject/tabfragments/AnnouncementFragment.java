@@ -1,5 +1,6 @@
 package edu.illinois.finalproject.tabfragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import edu.illinois.finalproject.Constants;
 import edu.illinois.finalproject.R;
+import edu.illinois.finalproject.activities.PostAnnouncementActivity;
 import edu.illinois.finalproject.javaobjects.AnnouncementList;
 import edu.illinois.finalproject.recycleradapters.AnnouncementRecyclerAdapter;
 
@@ -106,6 +107,13 @@ public class AnnouncementFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {}
+        });
+
+        postAnnouncementButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), PostAnnouncementActivity.class));
+            }
         });
     }
 

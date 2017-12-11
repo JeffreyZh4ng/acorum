@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.ProviderQueryResult;
 
+import edu.illinois.finalproject.Constants;
 import edu.illinois.finalproject.R;
 
 /**
@@ -24,7 +25,6 @@ import edu.illinois.finalproject.R;
  */
 public class ForgotPasswordActivity extends AppCompatActivity {
 
-    private static final String EMPTY_FIELD_ERROR = "Please enter a valid email";
     private static final String MALFORMED_EMAIL_ERROR = "Invalid email entered";
     private static final String EMAIL_DOESNT_EXIST_ERROR = "Email has not yet been registered";
     private static final String EMAIL_SUCCESSFUL = "Email sent!";
@@ -67,7 +67,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private void resetPasswordListener() {
         String email = emailField.getText().toString();
         if (email.isEmpty()) {
-            Toast.makeText(ForgotPasswordActivity.this, EMPTY_FIELD_ERROR, Toast.LENGTH_LONG).show();
+            Toast.makeText(ForgotPasswordActivity.this, Constants.EMPTY_FIELDS_TOAST, Toast.LENGTH_LONG).show();
         } else {
             resetPassword(email);
         }

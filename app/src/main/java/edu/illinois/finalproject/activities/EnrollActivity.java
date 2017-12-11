@@ -27,7 +27,6 @@ import edu.illinois.finalproject.javaobjects.Course;
  */
 public class EnrollActivity extends AppCompatActivity {
 
-    private static final String EMPTY_FIELD_ERROR = "Please enter a valid course key";
     private static final String COURSE_DOESNT_EXIST = "A course with the specified key does not exist!";
 
     private FirebaseAuth mAuth;
@@ -63,7 +62,7 @@ public class EnrollActivity extends AppCompatActivity {
     private void joinCourseListener() {
         courseKey = courseEnrollKeyField.getText().toString();
         if (courseKey.isEmpty()) {
-            Toast.makeText(EnrollActivity.this, EMPTY_FIELD_ERROR, Toast.LENGTH_LONG).show();
+            Toast.makeText(EnrollActivity.this, Constants.EMPTY_FIELDS_TOAST, Toast.LENGTH_LONG).show();
         } else {
             enrollStudent();
         }

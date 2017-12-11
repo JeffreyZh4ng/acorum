@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import edu.illinois.finalproject.Constants;
 import edu.illinois.finalproject.R;
 
 /**
@@ -22,7 +23,6 @@ import edu.illinois.finalproject.R;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String INVALID_CREDENTIALS_TOAST = "Invalid Email/Password";
-    private static final String NULL_CREDENTIALS_TOAST = "Please enter an Email/Password";
     private static final String LOGIN_TITLE = "Acorum - Login";
 
     private FirebaseAuth mAuth;
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailField.getText().toString();
         String password = passwordField.getText().toString();
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(LoginActivity.this, NULL_CREDENTIALS_TOAST, Toast.LENGTH_LONG).show();
+            Toast.makeText(LoginActivity.this, Constants.EMPTY_FIELDS_TOAST, Toast.LENGTH_LONG).show();
         } else {
             loginUser(email, password);
         }

@@ -30,7 +30,6 @@ import edu.illinois.finalproject.javaobjects.UserInformation;
  */
 public class RegisterCourseActivity extends AppCompatActivity {
 
-    private static final String NULL_FIELDS_TOAST = "Please complete all the empty fields";
     private static final String KEYS_DONT_MATCH = "The create course permission key you entered doesn't match";
     private static final String COURSE_CREATION_SUCCESS = "Course successfully registered!";
     private static final String CREATE_COURSE_PERMISSION_KEY = "123456";
@@ -89,7 +88,7 @@ public class RegisterCourseActivity extends AppCompatActivity {
         }
         else if (universityName.isEmpty() || courseTitle.isEmpty() || courseYear.isEmpty() || courseSection.isEmpty()
                 || courseTerm.isEmpty() || registerCourseKey.isEmpty()) {
-            Toast.makeText(RegisterCourseActivity.this, NULL_FIELDS_TOAST, Toast.LENGTH_LONG).show();
+            Toast.makeText(RegisterCourseActivity.this, Constants.EMPTY_FIELDS_TOAST, Toast.LENGTH_LONG).show();
         } else {
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override

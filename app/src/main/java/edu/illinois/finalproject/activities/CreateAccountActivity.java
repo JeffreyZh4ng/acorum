@@ -26,7 +26,6 @@ import edu.illinois.finalproject.javaobjects.UserInformation;
  */
 public class CreateAccountActivity extends AppCompatActivity {
 
-    private static final String NULL_CREDENTIALS_TOAST = "Please complete all the empty fields";
     private static final String PASSWORDS_DONT_MATCH = "The passwords you entered don't match";
     private static final String ACCOUNT_CREATION_SUCCESS = "Account successfully created!";
 
@@ -96,7 +95,7 @@ public class CreateAccountActivity extends AppCompatActivity {
             Toast.makeText(CreateAccountActivity.this, PASSWORDS_DONT_MATCH, Toast.LENGTH_LONG).show();
         }
         else if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(CreateAccountActivity.this, NULL_CREDENTIALS_TOAST, Toast.LENGTH_LONG).show();
+            Toast.makeText(CreateAccountActivity.this, Constants.EMPTY_FIELDS_TOAST, Toast.LENGTH_LONG).show();
         } else {
             signUpUser(firstName, lastName, email, password);
         }
