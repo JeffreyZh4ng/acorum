@@ -6,12 +6,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +35,7 @@ public class AnnouncementFragment extends Fragment {
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
     private RecyclerView announcementRecycler;
-    private Button postAnnouncementButton;
+    private Button createAnnouncementPostButton;
     private TextView announcementAlert;
     private String courseKey;
     private boolean isInstructor;
@@ -78,21 +76,21 @@ public class AnnouncementFragment extends Fragment {
     }
 
     /**
-     * Initializes and sets the text of componenets of the fragment when it is created
+     * Initializes and sets the text of components of the fragment when it is created
      *
      * @param view The view that the components of the fragment are held
      * @param savedInstanceState A savedInstanceState
      */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        postAnnouncementButton = (Button) view.findViewById(R.id.postAnnouncementButton);
+        createAnnouncementPostButton = (Button) view.findViewById(R.id.createAnnouncementPostButton);
         announcementRecycler = (RecyclerView) view.findViewById(R.id.announcementRecycler);
         announcementAlert = (TextView) view.findViewById(R.id.announcementAlert);
 
         if (!isInstructor) {
-            postAnnouncementButton.setVisibility(View.GONE);
+            createAnnouncementPostButton.setVisibility(View.GONE);
         }
-        postAnnouncementButton.setOnClickListener(new View.OnClickListener() {
+        createAnnouncementPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), PostAnnouncementActivity.class)

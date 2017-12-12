@@ -11,4 +11,5 @@ public class Constants {
     public static final String COURSES_CHILD = "courses";
     public static final String ENROLLED_COURSES_CHILD = "enrolledCourses";
     public static final String COURSE_ANNOUNCEMENTS_CHILD = "courseAnnouncements";
+    public static final String FORUM_POSTS_CHILD = "forumPosts";
 }

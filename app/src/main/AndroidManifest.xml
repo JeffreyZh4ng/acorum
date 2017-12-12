@@ -31,7 +31,9 @@
             android:label="@string/title_activity_course_dashboard"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".listelements.AnnouncementListElement" />
-        <activity android:name=".activities.PostAnnouncementActivity"></activity>
+        <activity android:name=".activities.PostAnnouncementActivity" />
+        <activity android:name=".listelements.ForumPostPreviewElement" />
+        <activity android:name=".activities.ForumPostActivity"></activity>
     </application>
 
 </manifest>

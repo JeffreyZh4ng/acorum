@@ -21,66 +21,66 @@ import java.util.Calendar;
 
 import edu.illinois.finalproject.Constants;
 import edu.illinois.finalproject.R;
-import edu.illinois.finalproject.javaobjects.Announcement;
+import edu.illinois.finalproject.javaobjects.ForumPost;
 
-public class PostAnnouncementActivity extends AppCompatActivity {
+public class ForumPostActivity extends AppCompatActivity {
 
-    private static final String ANNOUNCEMENT_POSTED_TOAST = "Announcement posted";
+    private static final String FORUM_POST_POSTED_TOAST = "Forum post posted";
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
-    private TextView titleTextEdit;
-    private TextView messageTextEdit;
-    private Button postAnnouncementButton;
+    private TextView forumPostTitleTextEdit;
+    private TextView forumPostMessageTextEdit;
+    private Button postForumPostButton;
     private String courseKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_announcement);
+        setContentView(R.layout.activity_forum_post);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
         courseKey = getIntent().getExtras().getString(Constants.COURSE_KEY_ARG);
 
-        titleTextEdit = (TextView) findViewById(R.id.titleTextEdit);
-        messageTextEdit = (TextView) findViewById(R.id.messageTextEdit);
-        postAnnouncementButton = (Button) findViewById(R.id.postAnnouncementButton);
+        forumPostTitleTextEdit = (TextView) findViewById(R.id.forumPostTitleTextEdit);
+        forumPostMessageTextEdit = (TextView) findViewById(R.id.forumPostMessageTextEdit);
+        postForumPostButton = (Button) findViewById(R.id.postForumPostButton);
 
-        postAnnouncementButton.setOnClickListener(new View.OnClickListener() {
+        postForumPostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                postAnnouncement();
+                postForumPost();
             }
         });
     }
 
-    private void postAnnouncement() {
-        String titleText = titleTextEdit.getText().toString();
-        String messageText = messageTextEdit.getText().toString();
-        if (titleText.isEmpty() || messageText.isEmpty()) {
-            Toast.makeText(PostAnnouncementActivity.this, Constants.EMPTY_FIELDS_TOAST, Toast.LENGTH_LONG).show();
+    private void postForumPost() {
+        String postTitle = forumPostTitleTextEdit.getText().toString();
+        String postMessage = forumPostMessageTextEdit.getText().toString();
+        if (postTitle.isEmpty() || postMessage.isEmpty()) {
+            Toast.makeText(ForumPostActivity.this, Constants.EMPTY_FIELDS_TOAST, Toast.LENGTH_LONG).show();
         } else {
-            addAnnouncementToDatabase(titleText, messageText);
+            addForumPostToDatabase(postTitle, postMessage);
         }
     }
 
-    private void addAnnouncementToDatabase(String titleText, String messageText) {
-        String currentDate = Calendar.getInstance().getTime().toString();
-        final Announcement announcement = new Announcement(titleText, currentDate, messageText);
+    private void addForumPostToDatabase(String postTitle, String postMessage) {
+        String datePosted = Calendar.getInstance().getTime().toString();
+        final ForumPost forumPost = new ForumPost(postTitle, datePosted, postMessage);
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                int announcementCount = 0;
-                for (DataSnapshot announcementSnapshot: dataSnapshot.child(Constants.COURSE_ANNOUNCEMENTS_CHILD)
+                int forumPostCount = 0;
+                for (DataSnapshot forumPostSnapshot: dataSnapshot.child(Constants.FORUM_POSTS_CHILD)
                         .child(courseKey).getChildren()) {
-                    announcementCount++;
+                    forumPostCount++;
                 }
-                mRef.child(Constants.COURSE_ANNOUNCEMENTS_CHILD).child(courseKey)
-                        .child(announcementCount + "_key").setValue(announcement);
-                Toast.makeText(PostAnnouncementActivity.this, ANNOUNCEMENT_POSTED_TOAST, Toast.LENGTH_LONG).show();
+                mRef.child(Constants.FORUM_POSTS_CHILD).child(courseKey)
+                        .child(forumPostCount + "_key").setValue(forumPost);
+                Toast.makeText(ForumPostActivity.this, FORUM_POST_POSTED_TOAST, Toast.LENGTH_LONG).show();
                 finish();
             }
 
@@ -115,17 +115,17 @@ public class PostAnnouncementActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.profileButton:
-                startActivity(new Intent(PostAnnouncementActivity.this, ProfileActivity.class));
+                startActivity(new Intent(ForumPostActivity.this, ProfileActivity.class));
                 finish();
                 break;
             case R.id.profileSettingsButton:
-                startActivity(new Intent(PostAnnouncementActivity.this, ProfileSettingsActivity.class));
+                startActivity(new Intent(ForumPostActivity.this, ProfileSettingsActivity.class));
                 finish();
                 break;
             case R.id.logoutButton:
                 mAuth.signOut();
                 if (mAuth.getCurrentUser() == null) {
-                    startActivity(new Intent(PostAnnouncementActivity.this, LoginActivity.class));
+                    startActivity(new Intent(ForumPostActivity.this, LoginActivity.class));
                 }
                 break;
             case R.id.backButton:
