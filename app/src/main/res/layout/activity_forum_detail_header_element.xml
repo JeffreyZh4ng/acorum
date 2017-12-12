@@ -23,7 +23,9 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
 
         <TextView
             android:id="@+id/forumDetailInfoTextView"
@@ -37,7 +39,9 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/forumDetailTitleTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/forumDetailTitleTextView"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
 
         <TextView
             android:id="@+id/forumDetailMessageTextView"
@@ -45,29 +49,51 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="15dp"
+            android:layout_toStartOf="@+id/editForumDetailPostButton"
+            android:layout_below="@+id/editForumDetailPostButton"
             android:text="TextView"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/forumDetailInfoTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/forumDetailInfoTextView"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="16dp" />
 
         <Button
             android:id="@+id/editForumDetailPostButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@color/common_google_signin_btn_text_light_default"
+            android:text="Post Response"
             android:textColor="@android:color/background_light"
-            android:text="Button"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/forumDetailMessageTextView" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            android:textSize="0sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editForumDetailPostButton"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

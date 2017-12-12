@@ -8,14 +8,16 @@ public class ForumPost {
     private String postTitle;
     private String datePosted;
     private String postMessage;
+    private String posterKey;
 
     public ForumPost() {
     }
 
-    public ForumPost(String postTitle, String datePosted, String postMessage) {
+    public ForumPost(String postTitle, String datePosted, String postMessage, String posterKey) {
         this.postTitle = postTitle;
         this.datePosted = datePosted;
         this.postMessage = postMessage;
+        this.posterKey = posterKey;
     }
 
     public String getPostTitle() {
@@ -40,5 +42,13 @@ public class ForumPost {
 
     public void setPostMessage(String postMessage) {
         this.postMessage = postMessage;
+    }
+
+    public String getPosterKey() {
+        return posterKey;
+    }
+
+    public void setPosterKey(String posterKey) {
+        this.posterKey = posterKey;
     }
 }

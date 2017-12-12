@@ -18,9 +18,11 @@ import edu.illinois.finalproject.javaobjects.ForumPost;
 public class ForumPostRecyclerAdapter extends RecyclerView.Adapter<ForumPostRecyclerAdapter.ViewHolder> {
     private static final int PREVIEW_STRING_LENGTH = 25;
     private HashMap<String, ForumPost> forumPostHashMap;
+    private String courseKey;
 
-    public ForumPostRecyclerAdapter(HashMap<String, ForumPost> forumPostHashMap) {
+    public ForumPostRecyclerAdapter(HashMap<String, ForumPost> forumPostHashMap, String courseKey) {
         this.forumPostHashMap = forumPostHashMap;
+        this.courseKey = courseKey;
     }
 
     @Override
@@ -32,7 +34,8 @@ public class ForumPostRecyclerAdapter extends RecyclerView.Adapter<ForumPostRecy
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ForumPost forumPost = forumPostHashMap.get((String.valueOf(position) + "_key"));
+        final String postKey = String.valueOf(position) + "_key";
+        ForumPost forumPost = forumPostHashMap.get(postKey);
         holder.forumPostTitleField.setText(forumPost.getPostTitle());
         String previewMessage = forumPost.getPostMessage();
         if (previewMessage.length() > PREVIEW_STRING_LENGTH) {
@@ -43,8 +46,8 @@ public class ForumPostRecyclerAdapter extends RecyclerView.Adapter<ForumPostRecy
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Need to put the courseKey and the forumpostID as extras
-                Intent newIntent = new Intent(view.getContext(), ForumDetailActivity.class);//.putExtra(Constants).putExtra();
+                Intent newIntent = new Intent(view.getContext(), ForumDetailActivity.class)
+                        .putExtra(Constants.COURSE_KEY_ARG, courseKey).putExtra(Constants.POST_KEY_ARG, postKey);
                 view.getContext().startActivity(newIntent);
             }
         });

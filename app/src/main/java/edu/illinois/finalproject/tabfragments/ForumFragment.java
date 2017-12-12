@@ -107,7 +107,7 @@ public class ForumFragment extends Fragment {
                     forumAlert.setVisibility(View.GONE);
                 }
 
-                ForumPostRecyclerAdapter adapter = new ForumPostRecyclerAdapter(forumPostHashMap);
+                ForumPostRecyclerAdapter adapter = new ForumPostRecyclerAdapter(forumPostHashMap, courseKey);
                 forumPostRecycler.setAdapter(adapter);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                 layoutManager.setReverseLayout(true);

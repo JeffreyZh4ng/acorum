@@ -69,7 +69,8 @@ public class ForumPostActivity extends AppCompatActivity {
 
     private void addForumPostToDatabase(String postTitle, String postMessage) {
         String datePosted = Calendar.getInstance().getTime().toString();
-        final ForumPost forumPost = new ForumPost(postTitle, datePosted, postMessage);
+        String userKey = mAuth.getCurrentUser().getUid();
+        final ForumPost forumPost = new ForumPost(postTitle, datePosted, postMessage, userKey);
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

@@ -24,7 +24,6 @@ import edu.illinois.finalproject.Constants;
 import edu.illinois.finalproject.R;
 import edu.illinois.finalproject.javaobjects.Course;
 import edu.illinois.finalproject.tabfragments.AnnouncementFragment;
-import edu.illinois.finalproject.tabfragments.CourseWorkFragment;
 import edu.illinois.finalproject.tabfragments.ForumFragment;
 
 /**
@@ -127,7 +126,6 @@ public class CourseDashboardActivity extends AppCompatActivity {
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private static final String ANNOUNCEMENT_TAB_TITLE = "Announcements";
-        private static final String CLASS_WORK_TAB_TITLE = "In Class";
         private static final String FORUM_TAB_TITLE = "Forum";
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -140,8 +138,6 @@ public class CourseDashboardActivity extends AppCompatActivity {
                 case 0:
                     return AnnouncementFragment.newInstance(courseKey, isInstructor);
                 case 1:
-                    return CourseWorkFragment.newInstance(courseKey);
-                case 2:
                     return ForumFragment.newInstance(courseKey, isInstructor);
                 default:
                     return null;
@@ -150,7 +146,7 @@ public class CourseDashboardActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
 
         @Override
@@ -159,9 +155,8 @@ public class CourseDashboardActivity extends AppCompatActivity {
                 case 0:
                     return ANNOUNCEMENT_TAB_TITLE;
                 case 1:
-                    return CLASS_WORK_TAB_TITLE;
-                case 2:
                     return FORUM_TAB_TITLE;
+
             }
             return null;
         }
