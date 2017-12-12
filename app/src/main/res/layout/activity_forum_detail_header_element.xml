@@ -1,5 +1,6 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp">
@@ -9,7 +10,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/announcementTitleField"
+            android:id="@+id/forumDetailTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -25,7 +26,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/announcementInfoField"
+            android:id="@+id/forumDetailInfoTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
@@ -36,24 +37,37 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/announcementTitleField" />
+            app:layout_constraintTop_toBottomOf="@+id/forumDetailTitleTextView" />
 
         <TextView
-            android:id="@+id/announcementMessageField"
+            android:id="@+id/forumDetailMessageTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginLeft="32dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
             android:text="TextView"
             android:textColor="@android:color/black"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/announcementInfoField"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/forumDetailInfoTextView" />
+
+        <Button
+            android:id="@+id/editForumDetailPostButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/common_google_signin_btn_text_light_default"
+            android:textColor="@android:color/background_light"
+            android:text="Button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/forumDetailMessageTextView" />
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>
