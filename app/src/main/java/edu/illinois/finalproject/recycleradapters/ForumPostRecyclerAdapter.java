@@ -32,10 +32,17 @@ public class ForumPostRecyclerAdapter extends RecyclerView.Adapter<ForumPostRecy
         return new ViewHolder(forumPostHolder);
     }
 
+    /**
+     * Sets the text for each forum post in the recycler view
+     *
+     * @param holder The holder for the data
+     * @param position The position of the announcement in the view
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final String postKey = String.valueOf(position) + "_key";
         ForumPost forumPost = forumPostHashMap.get(postKey);
+
         holder.forumPostTitleField.setText(forumPost.getPostTitle());
         String previewMessage = forumPost.getPostMessage();
         if (previewMessage.length() > PREVIEW_STRING_LENGTH) {
@@ -43,6 +50,7 @@ public class ForumPostRecyclerAdapter extends RecyclerView.Adapter<ForumPostRecy
         }
         holder.forumPostMessageField.setText(previewMessage + "...");
         holder.forumPostInfoField.setText("Posted on " + forumPost.getDatePosted());
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

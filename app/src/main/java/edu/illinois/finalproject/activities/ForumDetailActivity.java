@@ -33,6 +33,8 @@ public class ForumDetailActivity extends AppCompatActivity {
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
     private LinearLayout forumDetailList;
+    private LinearLayout forumDetailListResponses;
+    private Button createForumResponseButton;
     private String courseKey;
     private String postKey;
 
@@ -45,23 +47,29 @@ public class ForumDetailActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
         forumDetailList = (LinearLayout) findViewById(R.id.forumDetailList);
+        forumDetailListResponses = (LinearLayout) findViewById(R.id.forumDetailListResponses);
+        createForumResponseButton = (Button) findViewById(R.id.createForumResponseButton);
 
         courseKey = getIntent().getExtras().getString(Constants.COURSE_KEY_ARG);
         postKey = getIntent().getExtras().getString(Constants.POST_KEY_ARG);
 
-        setPostElement();
+        setPostElements();
+
+        createForumResponseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ForumDetailActivity.this, ForumPostResponseActivity.class)
+                        .putExtra(Constants.COURSE_KEY_ARG, courseKey).putExtra(Constants.POST_KEY_ARG, postKey));
+            }
+        });
     }
 
-    private void setPostElement() {
+    private void setPostElements() {
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                View view = LayoutInflater.from(forumDetailList.getContext()).inflate
-                        (R.layout.activity_forum_detail_header_element, forumDetailList, false);
-                ForumPost forumPost = dataSnapshot.child(Constants.FORUM_POSTS_CHILD)
-                        .child(courseKey).child(postKey).getValue(ForumPost.class);
-                setPostText(view, forumPost, dataSnapshot);
-                forumDetailList.addView(view);
+                setHeaderElement(dataSnapshot);
+                //setResponseElements(dataSnapshot);
             }
 
             @Override
@@ -69,6 +77,15 @@ public class ForumDetailActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void setHeaderElement(DataSnapshot dataSnapshot) {
+        View view = LayoutInflater.from(forumDetailList.getContext()).inflate
+                (R.layout.activity_forum_detail_header_element, forumDetailList, false);
+        ForumPost forumPost = dataSnapshot.child(Constants.FORUM_POSTS_CHILD)
+                .child(courseKey).child(postKey).getValue(ForumPost.class);
+        setPostText(view, forumPost, dataSnapshot);
+        forumDetailList.addView(view);
     }
 
     private void setPostText(View view, ForumPost forumPost, DataSnapshot dataSnapshot) {

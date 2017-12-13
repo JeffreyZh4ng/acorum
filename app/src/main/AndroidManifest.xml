@@ -35,7 +35,9 @@
         <activity android:name=".listelements.ForumPostPreviewElement" />
         <activity android:name=".activities.ForumPostActivity" />
         <activity android:name=".activities.ForumDetailActivity" />
-        <activity android:name=".listelements.ForumDetailHeaderElement"></activity>
+        <activity android:name=".listelements.ForumDetailHeaderElement" />
+        <activity android:name=".listelements.ForumPostResponseElement" />
+        <activity android:name=".activities.ForumPostResponseActivity"></activity>
     </application>
 
 </manifest>
