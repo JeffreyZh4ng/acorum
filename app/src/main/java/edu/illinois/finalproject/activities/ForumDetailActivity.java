@@ -1,14 +1,17 @@
 package edu.illinois.finalproject.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,18 +25,25 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
+
 import edu.illinois.finalproject.Constants;
 import edu.illinois.finalproject.R;
 import edu.illinois.finalproject.javaobjects.ForumPost;
+import edu.illinois.finalproject.javaobjects.ForumResponsePost;
 import edu.illinois.finalproject.javaobjects.UserInformation;
+import edu.illinois.finalproject.recycleradapters.ForumDetailRecyclerAdapter;
+import edu.illinois.finalproject.recycleradapters.ForumPostRecyclerAdapter;
+
+import static edu.illinois.finalproject.R.id.forumPostRecycler;
 
 public class ForumDetailActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
-    private LinearLayout forumDetailList;
-    private LinearLayout forumDetailListResponses;
+    private FrameLayout postHeaderContainer;
+    private RecyclerView forumPostResponseRecyclerView;
     private Button createForumResponseButton;
     private String courseKey;
     private String postKey;
@@ -46,14 +56,12 @@ public class ForumDetailActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
-        forumDetailList = (LinearLayout) findViewById(R.id.forumDetailList);
-        forumDetailListResponses = (LinearLayout) findViewById(R.id.forumDetailListResponses);
+        postHeaderContainer = (FrameLayout) findViewById(R.id.postHeaderContainer);
+        forumPostResponseRecyclerView = (RecyclerView) findViewById(R.id.forumPostResponseRecyclerView);
         createForumResponseButton = (Button) findViewById(R.id.createForumResponseButton);
 
         courseKey = getIntent().getExtras().getString(Constants.COURSE_KEY_ARG);
         postKey = getIntent().getExtras().getString(Constants.POST_KEY_ARG);
-
-        setPostElements();
 
         createForumResponseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,32 +70,49 @@ public class ForumDetailActivity extends AppCompatActivity {
                         .putExtra(Constants.COURSE_KEY_ARG, courseKey).putExtra(Constants.POST_KEY_ARG, postKey));
             }
         });
-    }
 
-    private void setPostElements() {
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 setHeaderElement(dataSnapshot);
-                //setResponseElements(dataSnapshot);
+                HashMap<String, ForumResponsePost> forumPostResponseHashMap = new HashMap<>();
+                for (DataSnapshot forumPostResponseSnapshot: dataSnapshot.child(Constants.FORUM_RESPONSES_CHILD)
+                        .child(courseKey).child(postKey).getChildren()) {
+                    ForumResponsePost post = forumPostResponseSnapshot.getValue(ForumResponsePost.class);
+                    forumPostResponseHashMap.put(forumPostResponseSnapshot.getKey(), post);
+                }
+                ForumDetailRecyclerAdapter adapter = new ForumDetailRecyclerAdapter(forumPostResponseHashMap, dataSnapshot);
+                forumPostResponseRecyclerView.setAdapter(adapter);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(forumPostResponseRecyclerView.getContext(), LinearLayoutManager.VERTICAL, false);
+                forumPostResponseRecyclerView.setLayoutManager(layoutManager);
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
     }
 
+    /**
+     * Adds the header element that displays the forum post text to the top of the detail activity
+     *
+     * @param dataSnapshot A dataSnapshot
+     */
     private void setHeaderElement(DataSnapshot dataSnapshot) {
-        View view = LayoutInflater.from(forumDetailList.getContext()).inflate
-                (R.layout.activity_forum_detail_header_element, forumDetailList, false);
+        View view = LayoutInflater.from(postHeaderContainer.getContext()).inflate
+                (R.layout.activity_forum_detail_header_element, postHeaderContainer, false);
         ForumPost forumPost = dataSnapshot.child(Constants.FORUM_POSTS_CHILD)
                 .child(courseKey).child(postKey).getValue(ForumPost.class);
         setPostText(view, forumPost, dataSnapshot);
-        forumDetailList.addView(view);
+        postHeaderContainer.addView(view);
     }
 
+    /**
+     * Sets the text of the header element view of the forum post that was clicked on
+     *
+     * @param view The view of the header element of the forum detail activity
+     * @param forumPost The forum post that was clicked on
+     * @param dataSnapshot A dataSnapshot
+     */
     private void setPostText(View view, ForumPost forumPost, DataSnapshot dataSnapshot) {
         TextView forumDetailTitleTextView = (TextView) view.findViewById(R.id.forumDetailTitleTextView);
         forumDetailTitleTextView.setText(forumPost.getPostTitle());
@@ -100,7 +125,14 @@ public class ForumDetailActivity extends AppCompatActivity {
         forumDetailMessageTextView.setText(forumPost.getPostMessage());
     }
 
-    private String getName(String userKey, DataSnapshot dataSnapshot) {
+    /**
+     * Method that gets the formatted name of a user given their user key
+     *
+     * @param userKey The userKey of the user
+     * @param dataSnapshot A dataSnapshot
+     * @return A formatted string of the users first and last name
+     */
+    public String getName(String userKey, DataSnapshot dataSnapshot) {
         StringBuilder userName = new StringBuilder();
         String userFirstName = dataSnapshot.child(Constants.USERS_CHILD).child(userKey).getValue(UserInformation.class).getFirstName();
         userName.append(userFirstName);
@@ -108,7 +140,6 @@ public class ForumDetailActivity extends AppCompatActivity {
         String userLastName = dataSnapshot.child(Constants.USERS_CHILD).child(userKey).getValue(UserInformation.class).getLastName();
         userName.append(userLastName);
         return userName.toString();
-
     }
 
     /**
