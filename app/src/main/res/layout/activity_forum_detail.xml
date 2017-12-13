@@ -28,7 +28,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="@color/common_google_signin_btn_text_light_default"
-        android:text="Add Response"
+        android:text="@string/add_response"
         android:textColor="@android:color/background_light"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"

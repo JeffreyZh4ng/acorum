@@ -3,7 +3,6 @@ package edu.illinois.finalproject.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,8 +19,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import edu.illinois.finalproject.Constants;
 import edu.illinois.finalproject.R;
-import edu.illinois.finalproject.javaobjects.Announcement;
-import edu.illinois.finalproject.javaobjects.AnnouncementList;
 import edu.illinois.finalproject.javaobjects.Course;
 import edu.illinois.finalproject.javaobjects.UserInformation;
 
@@ -104,9 +101,7 @@ public class RegisterCourseActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    
-                }
+                public void onCancelled(DatabaseError databaseError) {}
             });
         }
     }

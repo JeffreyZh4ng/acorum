@@ -1,6 +1,5 @@
 package edu.illinois.finalproject.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,8 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.ListView;
+
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,8 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.HashMap;
 
 import edu.illinois.finalproject.Constants;
@@ -33,9 +29,6 @@ import edu.illinois.finalproject.javaobjects.ForumPost;
 import edu.illinois.finalproject.javaobjects.ForumResponsePost;
 import edu.illinois.finalproject.javaobjects.UserInformation;
 import edu.illinois.finalproject.recycleradapters.ForumDetailRecyclerAdapter;
-import edu.illinois.finalproject.recycleradapters.ForumPostRecyclerAdapter;
-
-import static edu.illinois.finalproject.R.id.forumPostRecycler;
 
 public class ForumDetailActivity extends AppCompatActivity {
 
@@ -74,22 +67,31 @@ public class ForumDetailActivity extends AppCompatActivity {
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                setHeaderElement(dataSnapshot);
-                HashMap<String, ForumResponsePost> forumPostResponseHashMap = new HashMap<>();
-                for (DataSnapshot forumPostResponseSnapshot: dataSnapshot.child(Constants.FORUM_RESPONSES_CHILD)
-                        .child(courseKey).child(postKey).getChildren()) {
-                    ForumResponsePost post = forumPostResponseSnapshot.getValue(ForumResponsePost.class);
-                    forumPostResponseHashMap.put(forumPostResponseSnapshot.getKey(), post);
-                }
-                ForumDetailRecyclerAdapter adapter = new ForumDetailRecyclerAdapter(forumPostResponseHashMap, dataSnapshot);
-                forumPostResponseRecyclerView.setAdapter(adapter);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(forumPostResponseRecyclerView.getContext(), LinearLayoutManager.VERTICAL, false);
-                forumPostResponseRecyclerView.setLayoutManager(layoutManager);
+                setForumPostResponseElements(dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+    }
+
+    /**
+     * Helper method that sets the text and positions of all the responses to the forum post
+     *
+     * @param dataSnapshot A dataSnapshot of the database
+     */
+    private void setForumPostResponseElements(DataSnapshot dataSnapshot) {
+        setHeaderElement(dataSnapshot);
+        HashMap<String, ForumResponsePost> forumPostResponseHashMap = new HashMap<>();
+        for (DataSnapshot forumPostResponseSnapshot: dataSnapshot.child(Constants.FORUM_RESPONSES_CHILD)
+                .child(courseKey).child(postKey).getChildren()) {
+            ForumResponsePost post = forumPostResponseSnapshot.getValue(ForumResponsePost.class);
+            forumPostResponseHashMap.put(forumPostResponseSnapshot.getKey(), post);
+        }
+        ForumDetailRecyclerAdapter adapter = new ForumDetailRecyclerAdapter(forumPostResponseHashMap, dataSnapshot);
+        forumPostResponseRecyclerView.setAdapter(adapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(forumPostResponseRecyclerView.getContext(), LinearLayoutManager.VERTICAL, false);
+        forumPostResponseRecyclerView.setLayoutManager(layoutManager);
     }
 
     /**

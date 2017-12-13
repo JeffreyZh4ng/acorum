@@ -9,7 +9,6 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import edu.illinois.finalproject.R;
-import edu.illinois.finalproject.javaobjects.AnnouncementList;
 import edu.illinois.finalproject.javaobjects.Announcement;
 
 /**
@@ -18,8 +17,8 @@ import edu.illinois.finalproject.javaobjects.Announcement;
 public class AnnouncementRecyclerAdapter extends RecyclerView.Adapter<AnnouncementRecyclerAdapter.ViewHolder> {
     private HashMap<String, Announcement> announcements;
 
-    public AnnouncementRecyclerAdapter(AnnouncementList announcements) {
-        this.announcements = announcements.getAnnouncements();
+    public AnnouncementRecyclerAdapter(HashMap<String, Announcement> announcements) {
+        this.announcements = announcements;
     }
 
     @Override

@@ -32,6 +32,12 @@ public class ForumDetailRecyclerAdapter extends RecyclerView.Adapter<ForumDetail
         return new ForumDetailRecyclerAdapter.ViewHolder(forumPostResponseHolder);
     }
 
+    /**
+     * Sets the text for each response to a forum post
+     *
+     * @param holder The holder for each response
+     * @param position The position in the list of the element
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final String postKey = String.valueOf(position) + "_key";

@@ -23,4 +23,24 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="textview">TextView</string>
+    <string name="add_response">Add Response</string>
+    <string name="forum_post_title">Forum Post Title</string>
+    <string name="forum_post_body">Forum Post Body</string>
+    <string name="post_announcement">Post Announcement</string>
+    <string name="forum_post_response">Forum Post Response</string>
+    <string name="post_response">Post Response</string>
+    <string name="announcement_body">Announcement Body</string>
+    <string name="university_name">University Name</string>
+    <string name="course_title">Course Title</string>
+    <string name="course_section">Course Section</string>
+    <string name="course_year">Course Year</string>
+    <string name="course_term">Course Term</string>
+    <string name="register_course_key">Register Course Key</string>
+    <string name="create_course">Create Course</string>
+    <string name="you_are_not_enrolled_in_any_classes">You are not enrolled in any classes!</string>
+    <string name="register_a_course">Register A Course</string>
+    <string name="no_announcements_to_show">No announcements to show!</string>
+    <string name="no_forum_posts_to_show">No forum posts to show!</string>
+    <string name="create_forum_post">Create Forum Post</string>
 </resources>

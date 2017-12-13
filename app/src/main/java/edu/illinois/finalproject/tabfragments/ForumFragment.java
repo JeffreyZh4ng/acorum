@@ -36,7 +36,6 @@ public class ForumFragment extends Fragment {
     private Button createForumPostButton;
     private TextView forumAlert;
     private String courseKey;
-    private boolean isInstructor;
 
     public ForumFragment() {}
 
@@ -49,8 +48,7 @@ public class ForumFragment extends Fragment {
      */
     public static ForumFragment newInstance(String courseKey, boolean isInstructor) {
         Bundle args = new Bundle();
-        args.putString("courseKey", courseKey);
-        args.putBoolean("isInstructor", isInstructor);
+        args.putString(Constants.COURSE_KEY_ARG, courseKey);
         ForumFragment fragment = new ForumFragment();
         fragment.setArguments(args);
         return fragment;
@@ -65,8 +63,7 @@ public class ForumFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            courseKey = getArguments().getString("courseKey");
-            isInstructor = getArguments().getBoolean("isInstructor");
+            courseKey = getArguments().getString(Constants.COURSE_KEY_ARG);
         }
 
         mAuth = FirebaseAuth.getInstance();
@@ -97,27 +94,36 @@ public class ForumFragment extends Fragment {
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String, ForumPost> forumPostHashMap = new HashMap<>();
-                for (DataSnapshot forumPostSnapshot: dataSnapshot.child(Constants.FORUM_POSTS_CHILD)
-                        .child(courseKey).getChildren()) {
-                    ForumPost post = forumPostSnapshot.getValue(ForumPost.class);
-                    forumPostHashMap.put(forumPostSnapshot.getKey(), post);
-                }
-                if (forumPostHashMap.size() != 0) {
-                    forumAlert.setVisibility(View.GONE);
-                }
-
-                ForumPostRecyclerAdapter adapter = new ForumPostRecyclerAdapter(forumPostHashMap, courseKey);
-                forumPostRecycler.setAdapter(adapter);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                layoutManager.setReverseLayout(true);
-                layoutManager.setStackFromEnd(true);
-                forumPostRecycler.setLayoutManager(layoutManager);
+                setForumPostElements(dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+    }
+
+    /**
+     * Helper method that sets the text and the recycler view adapter for the forum posts
+     *
+     * @param dataSnapshot The dataSnapshot of the database
+     */
+    private void setForumPostElements(DataSnapshot dataSnapshot) {
+        HashMap<String, ForumPost> forumPostHashMap = new HashMap<>();
+        for (DataSnapshot forumPostSnapshot: dataSnapshot.child(Constants.FORUM_POSTS_CHILD)
+                .child(courseKey).getChildren()) {
+            ForumPost post = forumPostSnapshot.getValue(ForumPost.class);
+            forumPostHashMap.put(forumPostSnapshot.getKey(), post);
+        }
+        if (forumPostHashMap.size() != 0) {
+            forumAlert.setVisibility(View.GONE);
+        }
+
+        ForumPostRecyclerAdapter adapter = new ForumPostRecyclerAdapter(forumPostHashMap, courseKey);
+        forumPostRecycler.setAdapter(adapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        forumPostRecycler.setLayoutManager(layoutManager);
     }
 
     @Override

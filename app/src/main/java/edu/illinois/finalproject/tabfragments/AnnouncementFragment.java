@@ -24,7 +24,6 @@ import edu.illinois.finalproject.Constants;
 import edu.illinois.finalproject.R;
 import edu.illinois.finalproject.activities.PostAnnouncementActivity;
 import edu.illinois.finalproject.javaobjects.Announcement;
-import edu.illinois.finalproject.javaobjects.AnnouncementList;
 import edu.illinois.finalproject.recycleradapters.AnnouncementRecyclerAdapter;
 
 /**
@@ -51,8 +50,8 @@ public class AnnouncementFragment extends Fragment {
      */
     public static AnnouncementFragment newInstance(String courseKey, boolean isInstructor) {
         Bundle args = new Bundle();
-        args.putString("courseKey", courseKey);
-        args.putBoolean("isInstructor", isInstructor);
+        args.putString(Constants.COURSE_KEY_ARG, courseKey);
+        args.putBoolean(Constants.IS_INSTRUCTOR_ARG, isInstructor);
         AnnouncementFragment fragment = new AnnouncementFragment();
         fragment.setArguments(args);
         return fragment;
@@ -67,8 +66,8 @@ public class AnnouncementFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            courseKey = getArguments().getString("courseKey");
-            isInstructor = getArguments().getBoolean("isInstructor");
+            courseKey = getArguments().getString(Constants.COURSE_KEY_ARG);
+            isInstructor = getArguments().getBoolean(Constants.IS_INSTRUCTOR_ARG);
         }
 
         mDatabase = FirebaseDatabase.getInstance();
@@ -101,30 +100,36 @@ public class AnnouncementFragment extends Fragment {
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                AnnouncementList announcementList = new AnnouncementList();
-                HashMap<String, Announcement> announcementHashMap = new HashMap<>();
-                for (DataSnapshot announcementSnapshot: dataSnapshot.child(Constants.COURSE_ANNOUNCEMENTS_CHILD)
-                        .child(courseKey).getChildren()) {
-                    Announcement announcement = announcementSnapshot.getValue(Announcement.class);
-                    announcementHashMap.put(announcementSnapshot.getKey(), announcement);
-                }
-                if (announcementHashMap.size() != 0) {
-                    announcementAlert.setVisibility(View.GONE);
-                }
-
-                announcementList.setAnnouncements(announcementHashMap);
-                AnnouncementRecyclerAdapter adapter = new AnnouncementRecyclerAdapter(announcementList);
-                announcementRecycler.setAdapter(adapter);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                layoutManager.setReverseLayout(true);
-                layoutManager.setStackFromEnd(true);
-                announcementRecycler.setLayoutManager(layoutManager);
+                setAnnouncementElements(dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+    }
+
+    /**
+     * Helper method that will compile all the announcements and will create a recycler adapter for them
+     *
+     * @param dataSnapshot The dataSnapshot of database
+     */
+    private void setAnnouncementElements(DataSnapshot dataSnapshot) {
+        HashMap<String, Announcement> announcementHashMap = new HashMap<>();
+        for (DataSnapshot announcementSnapshot: dataSnapshot.child(Constants.COURSE_ANNOUNCEMENTS_CHILD)
+                .child(courseKey).getChildren()) {
+            Announcement announcement = announcementSnapshot.getValue(Announcement.class);
+            announcementHashMap.put(announcementSnapshot.getKey(), announcement);
+        }
+        if (announcementHashMap.size() != 0) {
+            announcementAlert.setVisibility(View.GONE);
+        }
+
+        AnnouncementRecyclerAdapter adapter = new AnnouncementRecyclerAdapter(announcementHashMap);
+        announcementRecycler.setAdapter(adapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        announcementRecycler.setLayoutManager(layoutManager);
     }
 
     @Override

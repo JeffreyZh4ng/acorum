@@ -85,12 +85,9 @@ public class PostAnnouncementActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
     }
-
 
     /**
      * Override method that will create the settings icon and the back button in the menu bar

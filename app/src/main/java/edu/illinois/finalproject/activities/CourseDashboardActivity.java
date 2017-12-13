@@ -66,14 +66,12 @@ public class CourseDashboardActivity extends AppCompatActivity {
         mRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String courseName = dataSnapshot.child("courses").child(courseKey).getValue(Course.class).getCourseName();
+                String courseName = dataSnapshot.child(Constants.COURSES_CHILD).child(courseKey).getValue(Course.class).getCourseName();
                 setTitle(courseName);
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
     }
 
