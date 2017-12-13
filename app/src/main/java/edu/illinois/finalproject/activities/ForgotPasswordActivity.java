@@ -29,6 +29,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     private static final String EMAIL_DOESNT_EXIST_ERROR = "Email has not yet been registered";
     private static final String EMAIL_SUCCESSFUL = "Email sent!";
     private static final String UNABLE_TO_SEND_EMAIL_ERROR = "Failed to send email";
+    private static final String TITLE_STRING = "Forgot Password";
 
     private FirebaseAuth mAuth;
     private EditText emailField;
@@ -40,6 +41,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
         mAuth = FirebaseAuth.getInstance();
+        setTitle(TITLE_STRING);
 
         emailField = (EditText) findViewById(R.id.recoveryEmailField);
         sendButton = (Button) findViewById(R.id.sendButton);

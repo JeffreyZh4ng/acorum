@@ -1,8 +1,11 @@
 package edu.illinois.finalproject.activities;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,14 +24,13 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
     private static final String PASSWORD_CHANGED_SUCCESSFUL = "Password Changed!";
     private static final String INVALID_PASSWORD_ERROR = "Please enter a valid password";
+    private static final String TITLE_STRING = "Profile Settings";
     private static final int MIN_PASSWORD_LENGTH = 6;
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
-    private DatabaseReference mRef;
     private EditText changePasswordField;
     private Button changePasswordButton;
-    private Button enrollButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_settings);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
-        mRef = mDatabase.getReference();
+        setTitle(TITLE_STRING);
 
         changePasswordField = (EditText) findViewById(R.id.newPasswordField);
         changePasswordButton = (Button) findViewById(R.id.changePasswordButton);
@@ -75,5 +77,41 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    /**
+     * Override method that will create the settings icon and the back button in the menu bar
+     *
+     * @param menu The menu that the icons are being set to
+     * @return True
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_dashboard, menu);
+        getMenuInflater().inflate(R.menu.menu_back_button, menu);
+        return true;
+    }
+
+    /**
+     * Override method that controls what happens when you click on one of the icons in the menu bar
+     *
+     * @param item The item in the menu that was clicked on
+     * @return True
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logoutButton:
+                mAuth.signOut();
+                if (mAuth.getCurrentUser() == null) {
+                    startActivity(new Intent(ProfileSettingsActivity.this, LoginActivity.class));
+                }
+                break;
+            case R.id.backButton:
+                startActivity(new Intent(ProfileSettingsActivity.this, UserDashboardActivity.class));
+
+                break;
+        }
+        return true;
     }
 }

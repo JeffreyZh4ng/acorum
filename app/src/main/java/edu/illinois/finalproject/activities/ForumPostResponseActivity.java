@@ -27,6 +27,8 @@ import edu.illinois.finalproject.javaobjects.ForumResponsePost;
 public class ForumPostResponseActivity extends AppCompatActivity {
 
     public static final String RESPONSE_POSTED_TOAST = "Response Posted";
+    private static final String TITLE_STRING = "Reply to Post";
+
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
@@ -44,6 +46,7 @@ public class ForumPostResponseActivity extends AppCompatActivity {
         mRef = mDatabase.getReference();
         courseKey = getIntent().getExtras().getString(Constants.COURSE_KEY_ARG);
         postKey = getIntent().getExtras().getString(Constants.POST_KEY_ARG);
+        setTitle(TITLE_STRING);
 
         forumPostResponseMessageTextEdit = (TextView) findViewById(R.id.forumPostResponseMessageTextEdit);
         postForumPostResponseButton = (Button) findViewById(R.id.postForumPostResponseButton);

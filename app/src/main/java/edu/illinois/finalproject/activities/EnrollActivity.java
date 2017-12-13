@@ -28,6 +28,7 @@ import edu.illinois.finalproject.javaobjects.Course;
 public class EnrollActivity extends AppCompatActivity {
 
     private static final String COURSE_DOESNT_EXIST = "A course with the specified key does not exist!";
+    private static final String TITLE_STRING = "Enroll in a Course";
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
@@ -43,6 +44,7 @@ public class EnrollActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
+        setTitle(TITLE_STRING);
 
         courseEnrollKeyField = (EditText) findViewById(R.id.courseEnrollKeyField);
         joinCourseButton = (Button) findViewById(R.id.joinCourseButton);

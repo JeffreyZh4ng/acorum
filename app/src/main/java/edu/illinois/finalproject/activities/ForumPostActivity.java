@@ -26,6 +26,7 @@ import edu.illinois.finalproject.javaobjects.ForumPost;
 public class ForumPostActivity extends AppCompatActivity {
 
     private static final String FORUM_POST_POSTED_TOAST = "Forum post posted";
+    private static final String TITLE_STRING = "Create Forum Post";
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
@@ -44,6 +45,7 @@ public class ForumPostActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
         courseKey = getIntent().getExtras().getString(Constants.COURSE_KEY_ARG);
+        setTitle(TITLE_STRING);
 
         forumPostTitleTextEdit = (TextView) findViewById(R.id.forumPostTitleTextEdit);
         forumPostMessageTextEdit = (TextView) findViewById(R.id.forumPostMessageTextEdit);

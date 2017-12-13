@@ -28,6 +28,7 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private static final String PASSWORDS_DONT_MATCH = "The passwords you entered don't match";
     private static final String ACCOUNT_CREATION_SUCCESS = "Account successfully created!";
+    private static final String TITLE_STRING = "Create Account";
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
@@ -48,6 +49,7 @@ public class CreateAccountActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
+        setTitle(TITLE_STRING);
 
         firstNameField = (EditText) findViewById(R.id.firstNameField);
         lastNameField = (EditText) findViewById(R.id.lastNameField);

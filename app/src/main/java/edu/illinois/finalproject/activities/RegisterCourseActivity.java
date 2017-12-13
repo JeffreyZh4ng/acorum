@@ -30,6 +30,7 @@ public class RegisterCourseActivity extends AppCompatActivity {
     private static final String KEYS_DONT_MATCH = "The create course permission key you entered doesn't match";
     private static final String COURSE_CREATION_SUCCESS = "Course successfully registered!";
     private static final String CREATE_COURSE_PERMISSION_KEY = "123456";
+    private static final String TITLE_STRING = "Register a Course";
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
@@ -51,6 +52,7 @@ public class RegisterCourseActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
         userKey = mAuth.getCurrentUser().getUid();
+        setTitle(TITLE_STRING);
 
         universityNameField = (EditText) findViewById(R.id.universityNameField);
         courseTitleField = (EditText) findViewById(R.id.courseTitleField);

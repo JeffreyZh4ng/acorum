@@ -26,6 +26,7 @@ import edu.illinois.finalproject.javaobjects.Announcement;
 public class PostAnnouncementActivity extends AppCompatActivity {
 
     private static final String ANNOUNCEMENT_POSTED_TOAST = "Announcement posted";
+    private static final String TITLE_STRING = "Post Announcement";
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
@@ -44,6 +45,7 @@ public class PostAnnouncementActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
         courseKey = getIntent().getExtras().getString(Constants.COURSE_KEY_ARG);
+        setTitle(TITLE_STRING);
 
         titleTextEdit = (TextView) findViewById(R.id.titleTextEdit);
         messageTextEdit = (TextView) findViewById(R.id.messageTextEdit);

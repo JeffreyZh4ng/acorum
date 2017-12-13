@@ -32,6 +32,8 @@ import edu.illinois.finalproject.recycleradapters.ForumDetailRecyclerAdapter;
 
 public class ForumDetailActivity extends AppCompatActivity {
 
+    private static final String TITLE_STRING = "Forum Post - Detail";
+
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
@@ -45,10 +47,11 @@ public class ForumDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum_detail);
-
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference();
+        setTitle(TITLE_STRING);
+
         postHeaderContainer = (FrameLayout) findViewById(R.id.postHeaderContainer);
         forumPostResponseRecyclerView = (RecyclerView) findViewById(R.id.forumPostResponseRecyclerView);
         createForumResponseButton = (Button) findViewById(R.id.createForumResponseButton);
@@ -64,6 +67,15 @@ public class ForumDetailActivity extends AppCompatActivity {
             }
         });
 
+        mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                setHeaderElement(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {}
+        });
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -81,7 +93,6 @@ public class ForumDetailActivity extends AppCompatActivity {
      * @param dataSnapshot A dataSnapshot of the database
      */
     private void setForumPostResponseElements(DataSnapshot dataSnapshot) {
-        setHeaderElement(dataSnapshot);
         HashMap<String, ForumResponsePost> forumPostResponseHashMap = new HashMap<>();
         for (DataSnapshot forumPostResponseSnapshot: dataSnapshot.child(Constants.FORUM_RESPONSES_CHILD)
                 .child(courseKey).child(postKey).getChildren()) {

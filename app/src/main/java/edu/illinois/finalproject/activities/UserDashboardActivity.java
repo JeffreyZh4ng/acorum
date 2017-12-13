@@ -3,6 +3,9 @@ package edu.illinois.finalproject.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,12 +21,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.illinois.finalproject.Constants;
 import edu.illinois.finalproject.R;
 import edu.illinois.finalproject.javaobjects.Course;
 import edu.illinois.finalproject.javaobjects.UserInformation;
+import edu.illinois.finalproject.recycleradapters.CourseRecyclerViewAdapter;
+import edu.illinois.finalproject.recycleradapters.ForumPostRecyclerAdapter;
 
 /**
  * An activity that is created when the user has successfully logged in. The user can enroll or create
@@ -37,7 +43,7 @@ public class UserDashboardActivity extends AppCompatActivity {
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
     private String userKey;
-    private LinearLayout courseListLayout;
+    private RecyclerView courseRecyclerView;
     private TextView enrollAlert;
     private Button enrollButton;
     private Button registerCourseButton;
@@ -51,7 +57,7 @@ public class UserDashboardActivity extends AppCompatActivity {
         mRef = mDatabase.getReference();
         userKey = mAuth.getCurrentUser().getUid();
 
-        courseListLayout = (LinearLayout) findViewById(R.id.courseList);
+        courseRecyclerView = (RecyclerView) findViewById(R.id.courseRecyclerView);
         enrollAlert = (TextView) findViewById(R.id.enrollAlert);
         enrollButton = (Button) findViewById(R.id.enrollButton);
         registerCourseButton = (Button) findViewById(R.id.registerCourseButton);
@@ -124,76 +130,20 @@ public class UserDashboardActivity extends AppCompatActivity {
      * @param dataSnapshot The dataSnapshot needed to retrieve the list of courses the user is in
      */
     private void setClassList(DataSnapshot dataSnapshot) {
-        HashMap<String, Boolean> courseList = dataSnapshot.child(Constants.USERS_CHILD).child(userKey).
+        HashMap<String, Boolean> courseHashMap = dataSnapshot.child(Constants.USERS_CHILD).child(userKey).
                 getValue(UserInformation.class).getEnrolledCourses();
-
-        for (final String key: courseList.keySet()) {
-            mRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    View view = LayoutInflater.from(courseListLayout.getContext()).inflate
-                            (R.layout.activity_course_list_element, courseListLayout, false);
-                    Course course = dataSnapshot.child(Constants.COURSES_CHILD).child(key).getValue(Course.class);
-
-                    setElementText(key, course, view);
-                    setElementOnClick(key, view, dataSnapshot);
-
-                    courseListLayout.addView(view);
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {}
-            });
+        ArrayList<Course> courseList = new ArrayList<>();
+        ArrayList<String> courseKeyList = new ArrayList<>();
+        for (String course: courseHashMap.keySet()) {
+            courseList.add(dataSnapshot.child(Constants.COURSES_CHILD).child(course).getValue(Course.class));
+            courseKeyList.add(course);
         }
-    }
+        Log.d("SIZE OF THE THING", courseList.size() + "");
 
-    /**
-     * Helper method that will be used to set each of the course element's text
-     *
-     * @param key The courseKey of the course
-     * @param course The course object from the database
-     * @param view The view of the inflater
-     */
-    private void setElementText(String key, Course course, View view) {
-        TextView courseTitleField = (TextView) view.findViewById(R.id.courseNameView);
-        courseTitleField.setText(course.getCourseName());
-
-        TextView courseInstructorField = (TextView) view.findViewById(R.id.courseInstructorView);
-        courseInstructorField.setText("Instructor:" + course.getHeadInstructor());
-
-        TextView courseUniversityField = (TextView) view.findViewById(R.id.courseUniversityView);
-        courseUniversityField.setText(course.getUniversity());
-
-        TextView courseInfoField = (TextView) view.findViewById(R.id.courseInfoView);
-        StringBuilder courseInfo = new StringBuilder(course.getTerm());
-        courseInfo.append(" ");
-        courseInfo.append(course.getYear());
-        courseInfo.append(", Section: ");
-        courseInfo.append(course.getSection());
-        courseInfoField.setText(courseInfo);
-    }
-
-    /**
-     * Helper method that sets on click listeners to each of the elements in the list and adds in the
-     * extra arguemnts needed for the course dashboard activity
-     *
-     * @param courseKey The courseKey of the course
-     * @param view The view of the layout inflater
-     */
-    private void setElementOnClick(final String courseKey, View view, final DataSnapshot dataSnapshot) {
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                HashMap<String, String> courseMap = dataSnapshot.child(Constants.COURSES_CHILD)
-                        .child(courseKey).getValue(Course.class).getInstructors();
-                boolean isInstructor = courseMap.containsKey(userKey);
-
-                Intent intent = new Intent(UserDashboardActivity.this, CourseDashboardActivity.class)
-                        .putExtra(Constants.COURSE_KEY_ARG, courseKey).putExtra(Constants.IS_INSTRUCTOR_ARG, isInstructor);
-                startActivity(intent);
-            }
-        });
-
+        CourseRecyclerViewAdapter adapter = new CourseRecyclerViewAdapter(courseList, courseKeyList, dataSnapshot, userKey);
+        courseRecyclerView.setAdapter(adapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(courseRecyclerView.getContext(), LinearLayoutManager.VERTICAL, false);
+        courseRecyclerView.setLayoutManager(layoutManager);
     }
 
     /**
