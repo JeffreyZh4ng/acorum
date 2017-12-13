@@ -106,10 +106,6 @@ public class ForumPostResponseActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.profileButton:
-                startActivity(new Intent(ForumPostResponseActivity.this, ProfileActivity.class));
-                finish();
-                break;
             case R.id.profileSettingsButton:
                 startActivity(new Intent(ForumPostResponseActivity.this, ProfileSettingsActivity.class));
                 finish();

@@ -97,10 +97,6 @@ public class CourseDashboardActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.profileButton:
-                startActivity(new Intent(CourseDashboardActivity.this, ProfileActivity.class));
-                finish();
-                break;
             case R.id.profileSettingsButton:
                 startActivity(new Intent(CourseDashboardActivity.this, ProfileSettingsActivity.class));
                 finish();

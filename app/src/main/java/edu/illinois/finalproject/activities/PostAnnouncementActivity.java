@@ -111,10 +111,6 @@ public class PostAnnouncementActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.profileButton:
-                startActivity(new Intent(PostAnnouncementActivity.this, ProfileActivity.class));
-                finish();
-                break;
             case R.id.profileSettingsButton:
                 startActivity(new Intent(PostAnnouncementActivity.this, ProfileSettingsActivity.class));
                 finish();

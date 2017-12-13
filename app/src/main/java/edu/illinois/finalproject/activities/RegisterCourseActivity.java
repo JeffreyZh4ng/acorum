@@ -116,7 +116,6 @@ public class RegisterCourseActivity extends AppCompatActivity {
         String courseKey = mRef.child(Constants.COURSES_CHILD).push().getKey();
         mRef.child(Constants.COURSES_CHILD).child(courseKey).setValue(course);
         mRef.child(Constants.USERS_CHILD).child(userKey).child(Constants.ENROLLED_COURSES_CHILD).child(courseKey).setValue(true);
-        mRef.child(Constants.COURSE_ANNOUNCEMENTS_CHILD).child(courseKey).setValue(new AnnouncementList());
 
         Toast.makeText(RegisterCourseActivity.this, COURSE_CREATION_SUCCESS, Toast.LENGTH_LONG).show();
         startActivity(new Intent(RegisterCourseActivity.this, UserDashboardActivity.class));
@@ -144,10 +143,6 @@ public class RegisterCourseActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.profileButton:
-                startActivity(new Intent(RegisterCourseActivity.this, ProfileActivity.class));
-                finish();
-                break;
             case R.id.profileSettingsButton:
                 startActivity(new Intent(RegisterCourseActivity.this, ProfileSettingsActivity.class));
                 finish();
